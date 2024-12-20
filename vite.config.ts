@@ -22,7 +22,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '~': fileURLToPath(new URL('./src', import.meta.url)),
-            '@api': fileURLToPath(new URL('./src/sharedLib/api/src', import.meta.url)),
+            '~api': fileURLToPath(new URL('./src/sharedLib/api/src', import.meta.url)),
         },
     },
 });

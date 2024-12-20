@@ -16,3 +16,17 @@ export function sortAsc(value: never[]) {
     copy.sort((a, b) => (a < b ? -1 : 1));
     return copy;
 }
+
+export function getAvailableLanguages(): string[] {
+    return import.meta.env.VITE_LANGUAGES.split(',');
+}
+
+export function getDefaultDescriptionLocalized() {
+    const tmp: Record<string, string> = {};
+
+    getAvailableLanguages().forEach((language) => {
+        tmp[language] = '';
+    });
+
+    return tmp;
+}

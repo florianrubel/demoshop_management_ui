@@ -3,9 +3,9 @@ import {
     computed, ref,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type AbstractDefaultService from '@api/services/abstractDefaultService';
+import type { ErrorResponseBody } from '~api/interfaces/api';
+import type AbstractDefaultService from '~api/services/abstractDefaultService';
 import { decapitalizeFirstLetter } from '~/helpers/misc';
-import type { ErrorResponseBody } from '@api/interfaces/api';
 
 
 import { useNotificationStore } from '~/store/notifications';

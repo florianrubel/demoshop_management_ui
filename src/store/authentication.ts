@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { deleteTokens, getAccessToken, getTokenUser } from '@api/helpers/authentication';
 
-import { type TokenUser } from '@api/interfaces/authentication/signIn';
+import { type TokenUser } from '~api/interfaces/authentication/signIn';
+
+import { deleteTokens, getAccessToken, getTokenUser } from '~api/helpers/authentication';
 
 export interface AuthenticationStoreState {
     user: TokenUser | null;

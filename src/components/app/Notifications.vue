@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useNotificationStore } from '~/store/notifications';
 
-import SingleNotification from '~/components/app/SingleNotification.vue';
+import Notification from '~/components/app/Notification.vue';
 
 const notificationStore = useNotificationStore();
 </script>
 
 <template lang="pug">
 transition-group(name="slideleft" tag="div" class="notifications-wrapper")
-    SingleNotification(
+    Notification(
         v-for="notification in notificationStore.notifications"
         :key="notification.id"
         :type="notification.type"

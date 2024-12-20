@@ -67,7 +67,7 @@ export default [
                 alias: {
                     map: [
                         ['~', './src'],
-                        ['@api', './src/sharedLib/api/src'],
+                        ['~api', './src/sharedLib/api/src'],
                     ],
                     extensions: ['.ts', '.js', '.tsx', '.json', '.vue'],
                 },
