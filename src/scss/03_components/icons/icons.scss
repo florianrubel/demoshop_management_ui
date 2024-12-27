@@ -1,0 +1,16 @@
+@import "../../01_base/variables";
+
+.icon {
+    display: block;
+    height: var(--width-icons-default);
+    width: var(--width-icons-default);
+
+    &--small {
+        height: calc(var(--width-icons-default) * 0.75);
+        width: calc(var(--width-icons-default) * 0.75);    
+    }
+    &--large {
+        height: calc(var(--width-icons-default) * 2);
+        width: calc(var(--width-icons-default) * 2);    
+    }
+}

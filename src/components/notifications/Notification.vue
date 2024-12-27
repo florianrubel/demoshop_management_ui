@@ -46,7 +46,6 @@ div(class="notification" :class="classes")
 
     button(
         v-if="props.notification"
-        slashes
         class="notification__dismiss"
         type="button"
         @click="notificationStore.removeNotification(props.notification)"

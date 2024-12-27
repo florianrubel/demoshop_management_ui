@@ -1,0 +1,34 @@
+@import "variables";
+
+.text {
+    &--primary {
+        color: var(--color-primary) !important;
+    }
+    &--success {
+        color: var(--color-success) !important;
+    }
+    &--warning {
+        color: var(--color-warning) !important;
+    }
+    &--error {
+        color: var(--color-error) !important;
+    }
+
+    &--regular {
+        font-weight: var(--font-weight-default) !important;
+    }
+    &--medium {
+        font-weight: var(--font-weight-medium) !important;
+    }
+    &--semi-bold {
+        font-weight: var(--font-weight-semibold) !important;
+    }
+    &--center {
+        text-align: center;
+    }
+
+    &--large {
+        font-size: var(--font-size-large);
+        line-height: var(--line-height-large);
+    }
+}

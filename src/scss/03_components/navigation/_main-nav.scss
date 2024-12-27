@@ -1,0 +1,37 @@
+@import "../../01_base/variables";
+
+.main-nav {
+    height: 100vh;
+    position: fixed;
+    width: var(--width-main-nav);
+
+    &__logo {
+        display: block;
+        height: var(--height-brand-logo);
+        padding: var(--spacing);
+        text-decoration: none;
+    }
+    &__item {
+        background: none;
+        border: none;
+        box-sizing: border-box;
+        color: var(--color-on-background);
+        cursor: pointer;
+        display: flex;
+        padding: calc(var(--spacing) / 2) var(--spacing);
+        font-weight: var(--font-weight-default);
+        text-align: left;
+        text-decoration: none;
+        width: 100%;
+
+        &:hover {
+            background: var(--color-bg-transparent);
+        }
+    }
+    &__item-icon {
+        margin-right: var(--spacing);
+    }
+    &__item-label {
+        flex-grow: 1;
+    }
+}

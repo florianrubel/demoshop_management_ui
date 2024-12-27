@@ -1,0 +1,137 @@
+@import "../../01_base/variables";
+
+.text-field, .text-area {
+    position: relative;
+
+    label {
+        font-size: 0.7rem;
+        line-height: 0.7rem;
+        display: inline-block;
+        padding: 0 var(--spacing);
+    }
+
+    &__input {
+        background: var(--color-surface);
+        // border: 1px solid var(--color-borders);
+        box-sizing: border-box;
+        display: flex;
+        padding: 0 calc(var(--spacing) / 2);
+        position: relative;
+        box-shadow: var(--shadow-inner);
+
+        input, textarea {
+            background: none;
+            border: none;
+            box-sizing: border-box;
+            display: block;
+            color: inherit;
+            flex-grow: 1;
+            font-family: inherit;
+            font-size: inherit;
+            height: calc(var(--height-input) - var(--input-label-adjustment));
+            line-height: var(--height-input);
+            margin-top: var(--input-label-adjustment);
+            min-width: calc(var(--height-input) * 3);
+            padding: 0 calc(var(--spacing) / 2);
+            outline: none;
+            width: 100%;
+
+            &[type="color"] {
+                height: calc(var(--height-input) - (var(--input-label-adjustment) * 3));
+                margin-top: calc(var(--input-label-adjustment) * 3);
+            }
+        }
+        textarea {
+            min-height: calc(var(--height-input) * 3);
+            line-height: var(--line-height-default);
+            padding: calc(var(--spacing) / 2);
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+        }
+    }
+    &__icon {
+        align-items: center;
+        display: flex;
+
+        &--left {
+            color: var(--color-primary);
+            padding-left: calc(var(--spacing) / 2);
+        }
+        &--right {
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            cursor: pointer;
+            padding: 0;
+            padding-right: calc(var(--spacing) / 2);
+        }
+    }
+
+    &__error {
+        color: var(--color-error);
+        font-size: var(--font-size-small);
+        line-height: var(--line-height-small);
+        padding: 0 var(--spacing);
+    }
+
+    &__options {
+        background: var(--color-bg);
+        border: 1px solid var(--color-borders);
+        border-radius: calc(var(--height-input) / 2);
+        box-shadow: var(--shadow-md);
+        box-sizing: border-box;
+        top: 0;
+        padding: calc(var(--height-input) + (var(--spacing) / 2)) 0 calc(var(--spacing) / 2) 0;
+        position: absolute;
+        width: 100%;
+    }
+    &__option {
+        border: none;
+        background: none;
+        box-sizing: border-box;
+        color: inherit;
+        cursor: pointer;
+        display: block;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        padding: calc(var(--spacing) / 4) calc(var(--spacing) * 2);
+        text-align: left;
+        width: 100%;
+
+        &:hover {
+            background: var(--color-primary-light);
+        }
+        &--selected {
+            cursor: default;
+            color: var(--color-primary);
+
+            &:hover {
+                background: none;
+            }
+        }
+    }
+
+    &--error {
+        .text-field__input, .text-area__input {
+            border-color: var(--color-error);
+            margin-bottom: calc(var(--spacing) / 4);
+        }
+    }
+    &--success {
+        .text-field__input, .text-area__input {
+            border-color: var(--color-success);
+        }
+    }
+    &--disabled {
+        label {
+            color: var(--color-disabled);
+        }
+        .text-field__input, .text-area__input {
+            border-style: dashed;
+            color: var(--color-disabled);
+        }
+    }
+}

@@ -1,11 +1,18 @@
 export {
+    AdjustmentsHorizontalIcon,
+    AtSymbolIcon,
     CheckIcon,
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     ExclamationTriangleIcon,
+    EyeIcon,
+    EyeSlashIcon,
     InformationCircleIcon,
+    HomeIcon,
+    KeyIcon,
     PlusIcon,
+    PowerIcon,
     XMarkIcon,
 } from '@heroicons/vue/24/outline';

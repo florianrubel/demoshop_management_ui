@@ -7,6 +7,7 @@ import vueTsEslintConfig from '@vue/eslint-config-typescript';
 import pluginVitest from '@vitest/eslint-plugin';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 import importPlugin from 'eslint-plugin-import';
+import typescriptEslintParser from '@typescript-eslint/parser';
 
 import javascriptRules from './src/sharedLib/eslintRulesets/javascript.js';
 import typescriptRules from './src/sharedLib/eslintRulesets/typescript.js';
@@ -75,9 +76,12 @@ export default [
         },
         // This is required for some typescript rules
         languageOptions: {
+            parser: typescriptEslintParser,
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
             },
         },
     },

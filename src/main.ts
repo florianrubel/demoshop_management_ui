@@ -8,6 +8,8 @@ import router from '~/router';
 
 import vSanitizeHtml from '~/directives/sanitizeHtml';
 
+import '~/scss/index.scss';
+
 const app = createApp(App);
 
 app

@@ -1,0 +1,35 @@
+.chip {
+    align-items: center;
+    background: var(--color-surface);
+    border: none;
+    border-radius: calc(var(--height-input) / 2);
+    column-gap: calc(var(--spacing) / 2);
+    display: flex;
+    height: var(--height-input);
+    padding: 0 calc(var(--spacing));
+    text-align: left;
+
+    &__remove-btn, &__add-btn {
+        background: transparent;
+        border: none;
+    }
+
+    &__image {
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        display: block;
+        height: calc(var(--height-input));
+        margin-left: calc(var(--spacing) * -1);
+        width: calc(var(--height-input));
+    }
+
+    &--removable, &--addable {
+        cursor: pointer;
+
+        &:hover {
+            background: var(--color-surface-highlighted--gradient-primary);
+        }
+    }
+}

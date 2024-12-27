@@ -1,0 +1,12 @@
+.control-bar {
+    display: flex;
+    gap: var(--spacing);
+
+    &__search {
+        flex-grow: 1;
+    }
+
+    &__actions {
+        gap: var(--spacing);
+    }
+}

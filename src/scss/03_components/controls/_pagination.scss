@@ -1,0 +1,46 @@
+@import "../../01_base/variables";
+
+.pagination {
+    display: flex;
+
+    &__first,
+    &__prev,
+    &__next,
+    &__last,
+    &__page {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: var(--font-size-large);
+        line-height: var(--line-height-large);
+        padding: 0 calc(var(--spacing) / 4);
+
+        &--current {
+            color: var(--color-primary);
+
+            &:hover {
+                color: var(--color-primary-dark);
+            }
+        }
+
+        &:hover {
+            color: var(--color-primary-dark);
+        }
+
+        &--no-action {
+            cursor: default !important;
+            color: inherit !important;
+        }
+
+        &[disabled] {
+            color: var(--color-disabled) !important;
+            cursor: not-allowed !important;
+        }
+    }
+    &__first {
+        padding-left: 0;
+    }
+    &__last {
+        padding-right: 0;
+    }
+}

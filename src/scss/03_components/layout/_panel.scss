@@ -1,0 +1,27 @@
+.panel {
+    background: var(--color-surface);
+    box-shadow: var(--shadow-default);
+    padding: var(--spacing);
+    position: relative;
+
+    &--embedded {
+        background: var(--color-neutral-light);
+        box-shadow: var(--shadow-inner);
+    }
+
+    &::before {
+        backdrop-filter: var(--blur-default);
+        content: '';
+        display: block;
+        // height: calc(100% - (var(--spacing) * 2));
+        // left: var(--spacing);
+        position: absolute;
+        // top: var(--spacing);
+        // width: calc(100% - (var(--spacing) * 2));
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+}

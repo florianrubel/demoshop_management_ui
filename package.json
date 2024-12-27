@@ -26,17 +26,18 @@
     "pinia": "^2.3.0",
     "uuid": "^11.0.3",
     "vue": "^3.5.13",
-    "vue-i18n": "^10.0.5",
+    "vue-i18n": "^11.0.1",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.10.2",
+    "@typescript-eslint/parser": "^8.18.2",
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vitest/eslint-plugin": "1.1.18",
-    "@vue/eslint-config-typescript": "^14.1.4",
-    "@vue/language-plugin-pug": "^2.1.10",
+    "@vitest/eslint-plugin": "1.1.20",
+    "@vue/eslint-config-typescript": "^14.2.0",
+    "@vue/language-plugin-pug": "^2.2.0",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "cypress": "^13.17.0",
@@ -53,12 +54,12 @@
     "sass": "^1.83.0",
     "start-server-and-test": "^2.0.9",
     "typescript": "~5.7.2",
-    "vite": "^6.0.4",
+    "vite": "^6.0.6",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-mkcert": "^1.17.6",
     "vite-plugin-vue-devtools": "^7.6.8",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
-    "vue-tsc": "^2.1.10"
+    "vue-tsc": "^2.2.0"
   }
 }

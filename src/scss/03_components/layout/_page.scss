@@ -1,0 +1,15 @@
+.page {
+    display: flex;
+
+    &__content {
+        min-height: 100vh;
+        padding: calc(var(--height-input) + var(--spacing)) var(--spacing);
+    }
+
+    &--center {
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+    }
+}

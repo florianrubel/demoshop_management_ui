@@ -1,0 +1,13 @@
+@import "../01_base/variables";
+
+.floating {
+    position: fixed;
+
+    &--top {
+        top: var(--spacing);
+    }
+
+    &--left {
+        left: var(--spacing);
+    }
+}

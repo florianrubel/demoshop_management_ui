@@ -56,7 +56,6 @@ const classes = computed<string[]>(() => {
 <template lang="pug">
 a(
     v-if="(!props.loading && !props.disabled) && props.href"
-    v-slashes
     :class="classes"
     :href="props.href"
     target="_blank"
@@ -78,7 +77,6 @@ a(
 
 router-link(
     v-else-if="(!props.loading && !props.disabled) && props.to"
-    v-slashes
     :class="classes"
     :to="props.to"
 )
@@ -98,7 +96,6 @@ router-link(
 
 button(
     v-else
-    v-slashes
     :class="classes"
     :disabled="props.disabled || props.loading"
     type="button"

@@ -6,9 +6,12 @@ import { useI18n } from 'vue-i18n';
 
 import type { NavItemDefinition } from '~/interfaces/navigation';
 
+import { PowerIcon } from '~/helpers/icons';
+
 import { useAuthenticationStore } from '~/store/authentication';
 
 import BrandLogo from '~/components/navigation/BrandLogo.vue';
+
 
 const { t } = useI18n();
 
@@ -25,13 +28,12 @@ withDefaults(defineProps<Props>(), {
 <template lang="pug">
 nav(class="main-nav")
     router-link(class="main-nav__logo" :to="{ name: 'home' }")
-        BrandLogo
+        BrandLogo(:light="true")
 
     div(class="main-nav__items")
         router-link(
             v-for="navItem in navItems"
             :key="navItem.label"
-            v-slashes
             :to="navItem.to"
             class="main-nav__item"
         )

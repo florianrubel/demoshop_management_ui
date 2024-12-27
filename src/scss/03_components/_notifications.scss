@@ -1,0 +1,77 @@
+@keyframes time-left {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.notifications-wrapper {
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: fixed;
+    height: calc(100vh - (var(--spacing) * 2));
+    padding: calc(var(--spacing) + var(--height-input)) var(--spacing);
+    pointer-events: none;
+    right: 0;
+    z-index: 100000;
+}
+  
+.notification {
+    align-items: center;
+    background: var(--color-info-transparent);
+    backdrop-filter: var(--blur-default);
+    border-left: 2px solid var(--color-info);
+    box-shadow: 1px 1px 5px rgba(0,0,0,.5);
+    display: flex;
+    margin-bottom: calc(var(--spacing) / 2);
+    padding: calc(var(--spacing) / 2) var(--spacing);
+    pointer-events: auto;
+  
+    &--info {
+        background-color: var(--color-info-transparent);
+        border-color: var(--color-info);
+    }
+    &--success {
+        background-color: var(--color-success-transparent);
+        border-color: var(--color-success);
+    }
+    &--warning {
+        background-color: var(--color-warning-transparent);
+        border-color: var(--color-warning);
+    }
+    &--error {
+        background-color: var(--color-error-transparent);
+        border-color: var(--color-error);
+    }
+    &--love {
+        background-color: var(--color-love-transparent);
+        border-color: var(--color-love);
+    }
+    &__icon {
+        margin-right: calc(var(--spacing));
+        padding: calc(var(spacing) / 2);
+    }
+    &__text {
+        flex-grow: 1;
+    }
+    &__dismiss {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: calc(var(spacing) / 2);
+    }
+  
+    &__time-indicator {
+        animation-name: time-left;
+        animation-timing-function: linear;
+        background: rgba(255, 255, 255, 0.3);
+        bottom: 0;
+        height: 2px;
+        position: absolute;
+        right: 0;
+    }
+}

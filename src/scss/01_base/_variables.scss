@@ -1,0 +1,90 @@
+:root {
+    --color-surface: hsl(0, 0%, 95%);
+    --color-on-surface: hsl(0, 0%, 11%);
+    --color-on-background: hsl(0, 0%, 95%);
+    
+    --color-neutral: hsl(219, 11%, 45%);
+    --color-disabled: hsl(219, 11%, 65%);
+
+    --color-borders: hsl(220, 13%, 75%);
+
+    --color-primary: hsl(212, 74%, 55%);
+    --color-primary-transparent: hsla(212, 74%, 55%, 0.3);
+    --color-primary-light: hsl(212, 74%, 85%);
+    --color-primary-dark: hsl(212, 74%, 25%);
+
+    --color-error: hsl(350, 82%, 51%);
+    --color-error-transparent: hsla(350, 82%, 51%, 0.3);
+    --color-error-light: hsl(350, 82%, 75%);
+    --color-error-dark: hsl(350, 82%, 25%);
+
+    --color-warning: hsl(44, 100%, 48%);
+    --color-warning-transparent: hsla(44, 100%, 48%,0.23);
+    --color-warning-light: hsl(44, 100%, 75%);
+    --color-warning-dark: hsl(44, 100%, 25%);
+
+    --color-success: hsl(152, 92%, 41%);
+    --color-success-transparent: hsla(152, 92%, 41%, 0.3);
+    --color-success-light: hsl(152, 92%, 75%);
+    --color-success-dark: hsl(152, 92%, 25%);
+
+    --color-info: hsl(211, 92%, 41%);
+    --color-info-transparent: hsla(211, 92%, 41%, 0.3);
+    --color-info-light: hsl(211, 92%, 75%);
+    --color-info-dark: hsl(211, 92%, 25%);
+
+    --background-multi: linear-gradient(170deg, hsl(202, 88%, 36%) 0%, hsl(170, 88%, 36%) 100%);
+
+    --font-family-default: "Inter", sans-serif;
+
+    --font-size-default: 16px;
+    --font-size-large: 18px;
+    --font-size-huge: 28px;
+    --font-size-small: 12px;
+    --font-size-tiny: 11px;
+
+    --line-height-default: 24px;
+    --line-height-large: 26px;
+    --line-height-huge: 36px;
+    --line-height-small: 16px;
+    --line-height-tiny: 14px;
+
+    --font-weight-default: 400;
+    --font-weight-medium: 500; 
+    --font-weight-semibold: 600;
+
+    --shadow-min: 0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-half: 0 1px 2px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.15);
+    --shadow-default: 0 2px 4px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-default-right: 2px 0 4px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-inner: inset 0 2px 5px rgba(0, 50, 100, 0.15), inset 0 0 10px rgba(0, 50, 100, 0.15);
+
+    --height-input: 52px;
+    --input-label-adjustment: 5px;
+    --height-brand-logo: 40px;
+    --height-chip: 28px;
+    --height-icon-switch-option: 44px;
+
+    --width-main-nav: 300px;
+    --width-icons-default: 24px;
+    --width-facets: 310px;
+    --width-icon-switch-option: 46px;
+
+    --size-checkbox: 18px;
+
+    --border-radius: 8px;
+
+    --spacing: 20px;
+
+    --screen-xs: 375px;
+    --screen-sm: 480px;
+    --screen-md: 768px;
+    --screen-lg: 1024px;
+    --screen-xl: 1280px;
+
+    --z-index-main-nav: 10;
+    --z-index-sticky: 2;
+    --z-index-active-control: 3;
+    --z-index-dialogs: 11;
+    --z-index-loading-indicator: 12;
+}

@@ -1,0 +1,48 @@
+@import "../01_base/variables";
+
+body {
+    background: var(--background-multi);
+    color: var(--color--on-surface);
+    font-family: var(--font-family-default);
+    font-size: var(--font-size-default);
+    line-height: var(--line-height-default);
+    margin: 0;
+    min-height: 100vh;
+    padding: 0;
+}
+
+body, h1, h2, h3, p, a, li, div, button, th, td {
+    text-rendering: geometricPrecision;
+}
+h1, h2, h3, p, a, li, div, button, th, td {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary);
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    margin: 0;
+}
+
+p a {
+    color: var(--color-primary);
+}
+
+hr {
+    background: radial-gradient(var(--color-white), rgba(255, 255, 255, 0) 70%);
+    border: none;
+    height: 3px;
+    margin: var(--spacing);
+}
+
+.fit-height-to-screen {
+    min-height: 100vh;
+}
+
+.full-width {
+    width: 100%;
+}

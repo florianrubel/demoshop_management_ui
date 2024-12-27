@@ -1,0 +1,40 @@
+.brand-logo {
+    align-items: center;
+    display: flex;
+    column-gap: calc(var(--spacing) / 2);
+    height: var(--height-input);
+    width: auto;
+
+    &__icon {
+        display: block;
+        height: 100%;
+        width: auto;
+    }
+    &__name {
+        display: block;
+        height: 30%;
+        width: auto;
+    }
+
+    &--vertical {
+        align-items: center;
+        height: auto;
+        column-gap: 0;
+        flex-direction: column;
+        justify-content: center;
+        row-gap: var(--spacing);
+
+        .brand-logo__icon {
+            height: 200px;
+            width: auto;
+        }
+        .brand-logo__name {
+            height: 25px;
+            width: auto;
+        }
+    }
+
+    &--light {
+        color: var(--color-on-background);
+    }
+}

@@ -1,0 +1,41 @@
+.richtextarea {
+    .ck.ck-editor__main .ck-editor__editable {
+        border: none;
+    }
+
+    .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+        border: none;
+    }
+
+    .ck.ck-dropdown > .ck-dropdown__panel > .ck-list {
+        backdrop-filter: var(--blur-default);
+    }
+
+    .ck.ck-button.ck-on {
+        background: none;
+        color: var(--color-primary) !important;
+
+        &:hover {
+            background: var(--color-surface-highlighted--gradient-primary) !important;
+            color: var(--color-on-surface) !important;
+        }
+    }
+    .ck-source-editing-area textarea {
+        background: var(--color-surface);
+        color: var(--color-on-surface);
+    }
+}
+@import 'ckeditor5/ckeditor5.css';
+:root {
+    --ck-border-radius: 0;
+    --ck-color-base-background: var(--color-surface);
+    --ck-inner-shadow: none;
+    --ck-focus-ring: none;
+    --ck-color-text: var(--color-on-surface);
+    --ck-color-button-on-background: transparent;
+    --ck-color-button-on-color: var(--color-primary);
+    --ck-color-list-button-on-background: var(--color-surface);
+    --ck-color-button-default-hover-background: var(--color-surface-highlighted--gradient-primary);
+    --ck-color-dropdown-panel-background: transparent;
+    --ck-focus-outer-shadow: none
+}
