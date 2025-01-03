@@ -15,6 +15,7 @@
 @import "01_base/floating";
 
 @import "02_animations/transitions/fade";
+@import "02_animations/transitions/slideleft";
 
 @import "03_components/notifications";
 
@@ -31,6 +32,7 @@
 @import "03_components/dialogs/overlay";
 
 @import "03_components/layout/control-bar";
+@import "03_components/layout/data-table";
 @import "03_components/layout/page";
 @import "03_components/layout/panel";
 

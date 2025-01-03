@@ -6,7 +6,7 @@ import {
 import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 import { getUniqueId } from '~/helpers/misc';
 
-const emits = defineEmits(['update:modelValue', 'focus', 'blur', 'enter']);
+const emits = defineEmits(['update:model-value', 'focus', 'blur', 'enter']);
 
 interface Props {
     modelValue?: string | number | null;
@@ -46,7 +46,7 @@ const classes = computed<string[]>(() => {
 
 function emitInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    emits('update:modelValue', target.value);
+    emits('update:model-value', target.value);
 }
 function emitFocus(event: Event) {
     isFocused.value = true;

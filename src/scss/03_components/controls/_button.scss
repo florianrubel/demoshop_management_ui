@@ -3,6 +3,8 @@
     background: var(--color-primary);
     border: none;
     box-sizing: border-box;
+    box-shadow: var(--shadow-default);
+    border-radius: var(--border-radius-input);
     color: var(--color-surface);
     cursor: pointer;
     display: flex;
@@ -15,7 +17,7 @@
     padding: 0 var(--spacing);
     position: relative;
     text-decoration: none;
-    transition: all 0.3s;
+    transition: all var(--transition-duration);
 
     &:hover, &--active {
         background: var(--color-primary-dark);
@@ -34,34 +36,42 @@
         position: absolute;
         width: 100%;
     }
+    &__content {
+        align-items: center;
+        display: flex;
+    }
 
     img, svg {
         // display: block;
-        height: calc(var(--height-input) * 0.8) !important;
+        height: calc(var(--height-input) * 0.6) !important;
         width: auto !important;
     }
 
     &--success {
+        background: var(--color-success);
         &:hover {
-            background: var(--color-surface-highlighted--gradient-success);
+            background: var(--color-success-dark);
         }
     }
 
     &--warning {
+        background: var(--color-warning);
         &:hover {
-            background: var(--color-surface-highlighted--gradient-warning);
+            background: var(--color-warning-dark);
         }
     }
 
     &--error {
+        background: var(--color-error);
         &:hover {
-            background: var(--color-surface-highlighted--gradient-error);
+            background: var(--color-error-dark);
         }
     }
 
     &--info {
+        background: var(--color-info);
         &:hover {
-            background: var(--color-surface-highlighted--gradient-info);
+            background: var(--color-info-dark);
         }
     }
 
@@ -86,10 +96,12 @@
     &--blank {
         background: transparent;
         backdrop-filter: none;
+        box-shadow: none;
+        color: var(--color-on-surface);
         
         &:hover {
-            background: var(--color-surface-highlighted--gradient-primary-alt);
-            backdrop-filter: var(--blur-default);
+            background: none;
+            color: var(--color-primary);
         }
 
         &:disabled {
@@ -113,6 +125,13 @@
     &--square {
         padding: 0;
         width: var(--height-input);
+    }
+    &--on-background {
+        color: var(--color-on-background);
+
+        &:hover {
+            color: var(--color-on-background-dark);
+        }
     }
     &:disabled {
         cursor: not-allowed;

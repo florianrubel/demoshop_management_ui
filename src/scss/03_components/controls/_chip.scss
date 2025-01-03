@@ -1,12 +1,14 @@
 .chip {
     align-items: center;
-    background: var(--color-surface);
+    background: var(--color-primary);
     border: none;
     border-radius: calc(var(--height-input) / 2);
+    box-shadow: var(--shadow-default);
     column-gap: calc(var(--spacing) / 2);
+    color: var(--color-on-background);
     display: flex;
     height: var(--height-input);
-    padding: 0 calc(var(--spacing));
+    padding: 0 var(--spacing);
     text-align: left;
 
     &__remove-btn, &__add-btn {
@@ -29,7 +31,7 @@
         cursor: pointer;
 
         &:hover {
-            background: var(--color-surface-highlighted--gradient-primary);
+            background: var(--color-primary-dark);
         }
     }
 }

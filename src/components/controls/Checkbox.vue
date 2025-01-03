@@ -5,7 +5,7 @@ import {
 
 import { CheckIcon } from '~/helpers/icons';
 
-const emits = defineEmits(['update:modelValue', 'focus', 'blur', 'enter']);
+const emits = defineEmits(['update:model-value', 'focus', 'blur', 'enter']);
 
 interface Props {
     modelValue: boolean;
@@ -22,7 +22,7 @@ const classes = computed<string[]>(() => {
 });
 
 function emitInput(): void {
-    emits('update:modelValue', !props.modelValue);
+    emits('update:model-value', !props.modelValue);
 }
 </script>
 

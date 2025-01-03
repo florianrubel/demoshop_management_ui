@@ -1,6 +1,17 @@
 .control-bar {
     display: flex;
     gap: var(--spacing);
+    position: fixed;
+    right: var(--spacing);
+    top: var(--spacing);
+    width: calc(100vw - var(--spacing) - var(--width-main-nav));
+
+    &__title {
+        align-items: center;
+        color: var(--color-on-background);
+        display: flex;
+        padding-left: var(--spacing);
+    }
 
     &__search {
         flex-grow: 1;

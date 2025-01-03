@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
 import TextField from '~/components/controls/TextField.vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     title: string;
     showSearch?: boolean;
-    searchTerm?: string;
+    searchQuery?: string;
 }>();
 
 const emit = defineEmits<{
-    'update:searchTerm': [searchTerm: string | undefined],
+    'update:search-query': [searchTerm: string | undefined],
 }>();
 </script>
 
@@ -20,8 +24,9 @@ div(class="control-bar")
         class="control-bar__search"
     )
         TextField(
-            :model-value="props.searchTerm"
-            @update:model-value="emit('update:searchTerm', props.searchTerm)"
+            :model-value="props.searchQuery"
+            :placeholder="t('search')"
+            @update:model-value="emit('update:search-query', $event)"
         )
     div(class="control-bar__actions")
         slot(name="actions")

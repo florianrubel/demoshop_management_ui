@@ -27,7 +27,10 @@ withDefaults(defineProps<Props>(), {
 
 <template lang="pug">
 nav(class="main-nav")
-    router-link(class="main-nav__logo" :to="{ name: 'home' }")
+    router-link(
+        class="main-nav__logo"
+        :to="{ name: 'home' }"
+    )
         BrandLogo(:light="true")
 
     div(class="main-nav__items")
@@ -37,13 +40,22 @@ nav(class="main-nav")
             :to="navItem.to"
             class="main-nav__item"
         )
-            div(v-if="navItem.icon" class="main-nav__item-icon")
-                component(:is="navItem.icon" class="icon")
+            div(
+                v-if="navItem.icon"
+                class="main-nav__item-icon"
+            )
+                component(
+                    :is="navItem.icon"
+                    class="icon"
+                )
             div(class="main-nav__item-label") {{ navItem.label }}
 
-        button(class="main-nav__item" type="button" @click="authenticationStore.deleteUser()")
+        button(
+            class="main-nav__item"
+            type="button"
+            @click="authenticationStore.deleteUser()"
+        )
             div(class="main-nav__item-icon")
-                PowerIcon( class="icon")
+                PowerIcon(class="icon")
             div(class="main-nav__item-label") {{ t('signout') }}
-
 </template>

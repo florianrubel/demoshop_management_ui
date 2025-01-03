@@ -2,17 +2,17 @@
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ViewBooleanProperty } from '~/sharedLib/api/src/interfaces/pim/properties/booleanProperty';
+import type { ViewNumericProperty } from '~/sharedLib/api/src/interfaces/pim/properties/numericProperty';
 import type { DataTableAction, DataTableActionEvent } from '~/interfaces/dataTable';
 
-import BooleanPropertyService from '~/sharedLib/api/src/services/pim/properties/booleanPropertyService';
+import NumericPropertyService from '~/sharedLib/api/src/services/pim/properties/numericPropertyService';
 
 import { PencilIcon, PlusIcon } from '~/helpers/icons';
 
 import { useAuthenticationStore } from '~/store/authentication';
 import { useNotificationStore } from '~/store/notifications';
 
-import CreatePatchBooleanProperty from '~/components/products/properties/booleanProperty/CreatePatchBooleanProperty.vue';
+import CreatePatchNumericProperty from '~/components/products/properties/numericProperty/CreatePatchNumericProperty.vue';
 import ControlBar from '~/components/layout/ControlBar.vue';
 import Button from '~/components/controls/Button.vue';
 import DataTable from '~/components/layout/dataTable/DataTable.vue';
@@ -24,12 +24,12 @@ const { t } = useI18n();
 const authenticationStore = useAuthenticationStore();
 const notificationStore = useNotificationStore();
 
-const booleanPropertyService = new BooleanPropertyService(
+const numericPropertyService = new NumericPropertyService(
     () => authenticationStore.setUser(),
     () => authenticationStore.deleteUser(),
 );
 
-const booleanProperties = ref<ViewBooleanProperty[]>([]);
+const numericProperties = ref<ViewNumericProperty[]>([]);
 const isLoading = ref<boolean>(false);
 const showCreate = ref<boolean>(false);
 const showEditFor = ref<string | null | undefined>(null);
@@ -39,6 +39,8 @@ const searchAbortController = ref<AbortController | null>(null);
 
 const headers = computed<string[]>(() => [
     t('name'),
+    t('minValue'),
+    t('maxValue'),
     t('createdAt'),
     t('updatedAt'),
 ]);
@@ -52,10 +54,10 @@ async function load(): Promise<void> {
     try {
         if (searchAbortController.value) searchAbortController.value.abort();
         searchAbortController.value = new AbortController();
-        const res = await booleanPropertyService.getMultiple({
+        const res = await numericPropertyService.getMultiple({
             searchQuery: searchQuery.value,
         }, searchAbortController.value.signal);
-        booleanProperties.value = res.data;
+        numericProperties.value = res.data;
     } catch {
         notificationStore.addNotification({
             text: t('dataNotLoaded'),
@@ -92,7 +94,7 @@ void load();
 <template lang="pug">
 ControlBar(
     v-model:search-query="searchQuery"
-    :title="t('booleanProperties')"
+    :title="t('numericProperties')"
     :show-search="true"
     @update:search-query="delayedSearch"
 )
@@ -109,26 +111,32 @@ DataTable(
     :has-actions="true"
 )
     DataTableRow(
-        v-for="booleanProperty in booleanProperties"
-        :key="booleanProperty.id"
+        v-for="numericProperty in numericProperties"
+        :key="numericProperty.id"
         :actions="dataTableActions"
-        :value="booleanProperty.id"
+        :value="numericProperty.id"
         @action="handleDataTableAction"
     )
         DataTableColumn(
-            :value="booleanProperty.name"
+            :value="numericProperty.name"
         )
         DataTableColumn(
-            :value="booleanProperty.createdAt"
+            :value="numericProperty.minValue"
+        )
+        DataTableColumn(
+            :value="numericProperty.maxValue"
+        )
+        DataTableColumn(
+            :value="numericProperty.createdAt"
             format="datetime"
         )
         DataTableColumn(
-            :value="booleanProperty.updatedAt"
+            :value="numericProperty.updatedAt"
             format="datetime"
         )
 
 
-CreatePatchBooleanProperty(
+CreatePatchNumericProperty(
     v-if="showCreate || showEditFor"
     :edit-id="showEditFor"
     @cancel="hideCreateEdit()"

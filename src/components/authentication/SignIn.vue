@@ -26,8 +26,8 @@ interface FormProperties {
 }
 
 const getDefaultFormProperties = (): FormProperties => ({
-    email: '',
-    password: '',
+    email: import.meta.env.VITE_SUPERADMIN_USER,
+    password: import.meta.env.VITE_SUPERADMIN_PASS,
 });
 
 const form = ref<FormProperties>(getDefaultFormProperties());
@@ -71,7 +71,7 @@ div(class="flex flex--full-size-center-screen")
             div(class="flex flex--justify-center flex--column flex--gap margin-top")
                 h2(class="text--center") Management UI
 
-                Notification {{ t('siginInExplanation') }}
+                Notification(:on-surface="true") {{ t('siginInExplanation') }}
 
                 TextField(
                     v-model="form.email"

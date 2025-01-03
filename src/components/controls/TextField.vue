@@ -6,7 +6,7 @@ import { getUniqueId } from '~/helpers/misc';
 import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 import type { SelectOption } from '~/interfaces/ui';
 
-const emits = defineEmits(['update:modelValue', 'focus', 'blur', 'enter']);
+const emit = defineEmits(['update:model-value', 'focus', 'blur', 'enter', 'keyup.enter']);
 
 interface Props {
     modelValue?: string | number | null;
@@ -54,21 +54,26 @@ const classes = computed<string[]>(() => {
 
 function emitInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    emits('update:modelValue', target.value);
+    emit('update:model-value', target.value);
 }
 function emitInputWithValue(value: string | null): void {
-    emits('update:modelValue', value);
+    emit('update:model-value', value);
 }
 function emitFocus(event: Event) {
     isFocused.value = true;
     canShowOptions.value = true;
     (event.target as HTMLInputElement).select();
-    emits('focus', event);
+    emit('focus', event);
 }
 function emitBlur(event: Event) {
     isFocused.value = false;
     canShowOptions.value = false;
-    emits('blur', event);
+    emit('blur', event);
+}
+function emitEnter() {
+    // eslint-disable-next-line no-console
+    console.log('enter');
+    emit('keyup.enter');
 }
 </script>
 
@@ -121,6 +126,7 @@ div(
             @input="emitInput"
             @focus="emitFocus"
             @blur="emitBlur"
+            @keyup.enter="emitEnter"
         )
         button(
             v-if="$slots.iconRight"

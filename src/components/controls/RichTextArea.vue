@@ -13,7 +13,7 @@ import { getUniqueId } from '~api/helpers/misc';
 
 const { locale } = useI18n();
 
-const emits = defineEmits(['update:modelValue', 'focus', 'blur', 'enter']);
+const emits = defineEmits(['update:model-value', 'focus', 'blur', 'enter']);
 
 const cloud = useCKEditorCloud({
     version: '44.1.0',
@@ -70,7 +70,7 @@ const id = ref<string>(getUniqueId());
 const isFocused = ref<boolean>(false);
 
 function emitInput(value: string): void {
-    emits('update:modelValue', value);
+    emits('update:model-value', value);
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function emitFocus(event: EventInfo<string, unknown>, _editor: unknown): any {

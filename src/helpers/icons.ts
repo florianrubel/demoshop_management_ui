@@ -12,6 +12,7 @@ export {
     InformationCircleIcon,
     HomeIcon,
     KeyIcon,
+    PencilIcon,
     PlusIcon,
     PowerIcon,
     XMarkIcon,

@@ -5,7 +5,11 @@ import { useI18n } from 'vue-i18n';
 import type { TabItem } from '~/interfaces/navigation';
 
 import Tabs from '~/components/navigation/Tabs.vue';
+import Page from '~/components/layout/Page.vue';
+import Panel from '~/components/layout/Panel.vue';
 import BooleanProperties from '~/components/products/properties/booleanProperty/BooleanProperties.vue';
+import NumericProperties from '~/components/products/properties/numericProperty/NumericProperties.vue';
+import StringProperties from '~/components/products/properties/stringProperty/StringProperties.vue';
 
 const { t } = useI18n();
 
@@ -22,7 +26,16 @@ const tabs = computed<TabItem<View>[]>(() => [
 </script>
 
 <template lang="pug">
-Tabs(v-model="currentView" :tabs)
-div(v-if="currentView === 'boolean'")
-    BooleanProperties
+Page
+    Panel
+        Tabs(
+            v-model="currentView"
+            :tabs
+        )
+        div(v-if="currentView === 'boolean'")
+            BooleanProperties
+        div(v-if="currentView === 'numeric'")
+            NumericProperties
+        div(v-if="currentView === 'string'")
+            StringProperties
 </template>

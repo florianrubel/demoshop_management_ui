@@ -7,10 +7,10 @@ import { getDefaultDescriptionLocalized, getAvailableLanguages } from '~/helpers
 import Button from '~/components/controls/Button.vue';
 import TextArea from '~/components/controls/TextArea.vue';
 
-const { fallbackLocale } = useI18n();
+const { locale } = useI18n();
 
 const emit = defineEmits<{
-    'update:modelValue': [modelValue: string],
+    'update:model-value': [modelValue: string],
 }>();
 
 const props = defineProps<{
@@ -18,7 +18,7 @@ const props = defineProps<{
     label?: string;
 }>();
 
-const selectedLanguage = ref<string>(fallbackLocale.value.toString());
+const selectedLanguage = ref<string>(locale.value.toString());
 const modelValueLocalized = ref<Record<string, string>>(getDefaultDescriptionLocalized());
 
 function handleUpdate(newValue: string) {
@@ -27,7 +27,7 @@ function handleUpdate(newValue: string) {
         [selectedLanguage.value]: newValue,
     });
     if (newValueString !== props.modelValue) {
-        emit('update:modelValue', newValueString);
+        emit('update:model-value', newValueString);
     }
 }
 

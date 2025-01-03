@@ -1,23 +1,23 @@
 <script lang="ts" setup>
 import {
-    computed, withDefaults,
+    computed,
 } from 'vue';
 
 import Overlay from '~/components/dialogs/Overlay.vue';
 import Panel from '~/components/layout/Panel.vue';
 
-const emits = defineEmits(['close']);
+const emit = defineEmits(['close', 'save']);
 
 interface Props {
     position?: string;
     large?: boolean;
     fullWidth?: boolean;
+    title?: string;
+    saveAndCancel?: boolean;
+    disableSaving?: boolean;
+    isLoading?: boolean;
 }
-const props = withDefaults(defineProps<Props>(), {
-    position: undefined,
-    large: false,
-    fullWidth: false,
-});
+const props = defineProps<Props>();
 
 const classes = computed<string[]>(() => {
     const tmp: string[] = [];
@@ -29,7 +29,7 @@ const classes = computed<string[]>(() => {
 
 function handleClose(event: Event): void {
     event.stopPropagation();
-    emits('close');
+    emit('close');
 }
 </script>
 <template lang="pug">
@@ -40,6 +40,14 @@ teleport(to="#dialogs")
     )
         Overlay(@click="handleClose")
         div(class="dialog__content")
-            Panel
+            Panel(
+                :title="props.title"
+                :closable="true"
+                :save-and-cancel="props.saveAndCancel"
+                :disable-saving="props.disableSaving"
+                :is-loading="props.isLoading"
+                @close="emit('close')"
+                @save="emit('save')"
+            )
                 slot
 </template>

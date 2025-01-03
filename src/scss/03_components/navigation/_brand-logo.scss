@@ -1,6 +1,7 @@
 .brand-logo {
     align-items: center;
     display: flex;
+    color: var(--color-primary);
     column-gap: calc(var(--spacing) / 2);
     height: var(--height-input);
     width: auto;

@@ -19,6 +19,7 @@ interface Props {
     fullWidth?: boolean;
     noWrap?: boolean;
     square?: boolean;
+    onBackground?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
     type: undefined,
@@ -49,6 +50,7 @@ const classes = computed<string[]>(() => {
     if (props.fullWidth) tmp.push('button--full-width');
     if (props.noWrap) tmp.push('button--no-wrap');
     if (props.square) tmp.push('button--square');
+    if (props.onBackground) tmp.push('button--on-background');
     return tmp;
 });
 

@@ -18,11 +18,13 @@ interface Props {
     type?: string;
     duration?: number;
     notification?: Notification;
+    onSurface?: boolean;
 }
 const props = defineProps<Props>();
 
 const classes = computed<string[]>(() => {
     const tmp = [];
+    if (props.onSurface) tmp.push('notification--on-surface');
     if (props.type === 'info') tmp.push('notification--info');
     if (props.type === 'success') tmp.push('notification--success');
     if (props.type === 'warning') tmp.push('notification--warning');
@@ -33,13 +35,27 @@ const classes = computed<string[]>(() => {
 </script>
 
 <template lang="pug">
-div(class="notification" :class="classes")
-
+div(
+    class="notification"
+    :class="classes"
+)
     div(class="notification__icon")
-        CheckIcon(v-if="props.type === 'success'" class="icon")
-        ExclamationTriangleIcon(v-if="props.type === 'warning'" class="icon")
-        ExclamationTriangleIcon(v-if="props.type === 'error'" class="icon")
-        InformationCircleIcon(v-if="props.type === 'info'" class="icon")
+        CheckIcon(
+            v-if="props.type === 'success'"
+            class="icon"
+        )
+        ExclamationTriangleIcon(
+            v-if="props.type === 'warning'"
+            class="icon"
+        )
+        ExclamationTriangleIcon(
+            v-if="props.type === 'error'"
+            class="icon"
+        )
+        InformationCircleIcon(
+            v-if="props.type === 'info'"
+            class="icon"
+        )
 
     div(class="notification__text")
         slot
@@ -51,6 +67,7 @@ div(class="notification" :class="classes")
         @click="notificationStore.removeNotification(props.notification)"
     )
         XMarkIcon(class="icon")
+
     div(
         v-if="props.duration"
         class="notification__time-indicator"

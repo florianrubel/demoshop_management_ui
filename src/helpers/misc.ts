@@ -30,3 +30,21 @@ export function getDefaultDescriptionLocalized() {
 
     return tmp;
 }
+
+export function numberToLocaleString(locale: string | undefined, value: number, minimumFractionDigits = 2, maximumFractionDigits = 2): string {
+    return value.toLocaleString(locale, { minimumFractionDigits, maximumFractionDigits });
+}
+
+export function formatDateTime(isoString?: string | null, locale?: string): string {
+    if (!isoString) return '';
+    const dateTime = new Date(isoString);
+
+    return (new Intl.DateTimeFormat(locale || 'en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    })).format(dateTime);
+}

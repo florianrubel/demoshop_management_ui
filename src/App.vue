@@ -6,6 +6,8 @@ import { useI18n } from 'vue-i18n';
 
 import type { NavItemDefinition } from '~/interfaces/navigation';
 
+import { AdjustmentsHorizontalIcon, HomeIcon } from '~/helpers/icons';
+
 import { getLanguageFromLocale } from '~/i18n';
 
 import { useAuthenticationStore } from '~/store/authentication';
@@ -13,11 +15,10 @@ import { useAuthenticationStore } from '~/store/authentication';
 import MainNav from '~/components/navigation/MainNav.vue';
 import SignIn from '~/components/authentication/SignIn.vue';
 import Notifications from '~/components/notifications/Notifications.vue';
-
-import { AdjustmentsHorizontalIcon, HomeIcon } from '~/helpers/icons';
+import Page from '~/components/layout/Page.vue';
 
 const authenticationStore = useAuthenticationStore();
-const { t } = useI18n();
+const { t, availableLocales } = useI18n();
 
 const navItems = computed<NavItemDefinition[]>(() => ([
     {
@@ -31,30 +32,25 @@ const navItems = computed<NavItemDefinition[]>(() => ([
         icon: AdjustmentsHorizontalIcon,
     },
 ]));
-const pageClasses = computed<string[]>(() => {
-    const classes = [];
-    if (!authenticationStore.user) classes.push('page--center');
-    return classes;
-});
 
 authenticationStore.setUser();
 const raw = navigator.language;
 const language = getLanguageFromLocale(raw);
-useI18n().locale.value = language;
+const foundLocale = availableLocales.find((availableLocale) => availableLocale.toLocaleLowerCase().startsWith(language));
+if (foundLocale) useI18n().locale.value = foundLocale;
 </script>
 
 <template lang="pug">
-div(
-    class="page"
-    :class="pageClasses"
+template(v-if="authenticationStore.user")
+    MainNav(
+        :nav-items
+    )
+    router-view
+Page(
+    v-else
+    :center-content="true"
 )
-    template(v-if="authenticationStore.user")
-        MainNav(
-            :nav-items
-        )
-        main
-            router-view
-    SignIn(v-else)
+    SignIn
 div(id="dialogs")
 div(id="loading-indicator-beam-wrapper")
 Notifications

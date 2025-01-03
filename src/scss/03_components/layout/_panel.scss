@@ -1,6 +1,8 @@
 .panel {
     background: var(--color-surface);
+    border-radius: var(--border-radius);
     box-shadow: var(--shadow-default);
+    overflow: hidden;
     padding: var(--spacing);
     position: relative;
 
@@ -9,19 +11,17 @@
         box-shadow: var(--shadow-inner);
     }
 
-    &::before {
-        backdrop-filter: var(--blur-default);
-        content: '';
-        display: block;
-        // height: calc(100% - (var(--spacing) * 2));
-        // left: var(--spacing);
-        position: absolute;
-        // top: var(--spacing);
-        // width: calc(100% - (var(--spacing) * 2));
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        z-index: -1;
+    &__header {
+        align-items: center;
+        background: var(--color-primary);
+        display: flex;
+        justify-content: space-between;
+        margin: calc(var(--spacing) * -1);
+        margin-bottom: var(--spacing);
+        padding-left: var(--spacing);
+
+        & > * {
+            color: var(--color-on-background);
+        }
     }
 }

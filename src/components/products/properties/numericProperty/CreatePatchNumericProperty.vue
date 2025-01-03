@@ -4,12 +4,12 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~/sharedLib/api/src/interfaces/pim/properties/booleanProperty';
+import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~/sharedLib/api/src/interfaces/pim/properties/numericProperty';
 import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
 
 import { DEFAULT_INPUT_MAX_LENGTH, DEFAULT_INPUT_MIN_LENGTH } from '~/constants/app';
 
-import BooleanPropertyService from '~/sharedLib/api/src/services/pim/properties/booleanPropertyService';
+import NumericPropertyService from '~/sharedLib/api/src/services/pim/properties/numericPropertyService';
 
 import { useAuthenticationStore } from '~/store/authentication';
 
@@ -24,13 +24,13 @@ const { t } = useI18n();
 const authenticationStore = useAuthenticationStore();
 
 const emit = defineEmits<{
-    created: [results: ViewBooleanProperty[]],
-    patched: [results: ViewBooleanProperty[]],
-    saved: [results: ViewBooleanProperty[]],
+    created: [results: ViewNumericProperty[]],
+    patched: [results: ViewNumericProperty[]],
+    saved: [results: ViewNumericProperty[]],
     cancel: [],
 }>();
 
-const booleanPropertyService = new BooleanPropertyService(
+const numericPropertyService = new NumericPropertyService(
     () => authenticationStore.setUser(),
     () => authenticationStore.deleteUser(),
 );
@@ -40,16 +40,18 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-const getDefaultFormProperties = (): (PatchBooleanProperty | CreateBooleanProperty) => ({
+const getDefaultFormProperties = (): (PatchNumericProperty | CreateNumericProperty) => ({
     name: '',
+    minValue: null,
+    maxValue: null,
 });
 
 const validation = useValidation();
 // This is fine here, because the component will be recreated.
 // eslint-disable-next-line vue/no-setup-props-destructure
-const form = useForm<ViewBooleanProperty, CreateBooleanProperty, PatchBooleanProperty, SearchParameters>({
+const form = useForm<ViewNumericProperty, CreateNumericProperty, PatchNumericProperty, SearchParameters>({
     emit,
-    service: booleanPropertyService,
+    service: numericPropertyService,
     getDefaultFormProperties,
     validationFunctions: {
         name: [(value: string | undefined | null) => validation.limitedString(value, DEFAULT_INPUT_MIN_LENGTH, DEFAULT_INPUT_MAX_LENGTH, false)],
@@ -75,6 +77,20 @@ Dialog(
         :errors="form.errors.value.name"
         class="margin-top"
         required
+    )
+    TextField(
+        v-model="form.editModel.value.minValue"
+        type="number"
+        :label="t('minValue')"
+        :errors="form.errors.value.minValue"
+        class="margin-top"
+    )
+    TextField(
+        v-model="form.editModel.value.maxValue"
+        type="number"
+        :label="t('maxValue')"
+        :errors="form.errors.value.maxValue"
+        class="margin-top"
     )
 
 </template>

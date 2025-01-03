@@ -9,7 +9,7 @@ import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 
 import TextField from '~/components/controls/TextField.vue';
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:model-value']);
 
 interface Props {
     modelValue: string | null | undefined;
@@ -68,7 +68,7 @@ const classes = computed<string[]>(() => {
 });
 
 function emitInput(value: string | null | undefined): void {
-    emits('update:modelValue', value);
+    emits('update:model-value', value);
     expanded.value = false;
 }
 function toggleExpanded(): void {

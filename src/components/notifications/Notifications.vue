@@ -7,7 +7,11 @@ const notificationStore = useNotificationStore();
 </script>
 
 <template lang="pug">
-transition-group(name="slideleft" tag="div" class="notifications-wrapper")
+transition-group(
+    name="slideleft"
+    tag="div"
+    class="notifications-wrapper"
+)
     Notification(
         v-for="notification in notificationStore.notifications"
         :key="notification.id"

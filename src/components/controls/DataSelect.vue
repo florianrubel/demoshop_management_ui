@@ -8,7 +8,7 @@ import type { SelectOption } from '~/interfaces/ui';
 
 import Select from '~/components/controls/Select.vue';
 
-const emits = defineEmits(['update:modelValue', 'update:value']);
+const emits = defineEmits(['update:model-value', 'update:value']);
 
 interface Props {
     modelValue: string | null | undefined;
@@ -33,7 +33,7 @@ const options = computed<SelectOption<string>[]>(() => records.value.map((record
 })));
 
 function emitInput(value: string): void {
-    emits('update:modelValue', value);
+    emits('update:model-value', value);
     emits('update:value', value ? records.value.find(({ id }) => id === value) : null);
 }
 
@@ -64,12 +64,12 @@ async function loadValue(): Promise<void> {
 }
 
 watch(() => props.modelValue, () => {
-    loadOptions();
-    loadValue();
+    void loadOptions();
+    void loadValue();
 });
 
-loadOptions();
-loadValue();
+void loadOptions();
+void loadValue();
 </script>
 
 <template lang="pug">

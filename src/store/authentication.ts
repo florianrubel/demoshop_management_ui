@@ -23,18 +23,9 @@ export const useAuthenticationStore = defineStore('authentication', {
                 this.user = null;
             }
         },
-        deleteUser(deleteOnly = false): void {
-            if (this.user) {
-                if (deleteOnly) {
-                    deleteTokens();
-                    this.user = null;
-                } else {
-                    deleteTokens();
-                    this.user = null;
-                }
-            } else {
-                deleteTokens();
-            }
+        deleteUser(): void {
+            deleteTokens();
+            this.user = null;
         },
     },
 });

@@ -37,16 +37,16 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     const resErrors = ref<Record<string, string[]>[]>([]);
 
     function getChangedPatch(model: PatchType) {
-        if (!origin.value) return model as PatchType;
+        if (!origin.value) return model;
         const changed = {} as PatchType;
-        Object.keys(model as PatchType).forEach((prop) => {
+        Object.keys(model).forEach((prop) => {
             const originValue = (origin.value as ViewType)[prop as keyof ViewType] as never;
-            const patchValue = (model as PatchType)[prop as keyof PatchType] as never;
+            const patchValue = (model)[prop as keyof PatchType] as never;
             if (patchValue !== originValue) {
-                changed[prop as keyof PatchType] = patchValue as never;
+                changed[prop as keyof PatchType] = patchValue;
             }
         });
-        return changed as PatchType;
+        return changed;
     }
 
     const changedPatch = computed<PatchType>(() => getChangedPatch(editModel.value as PatchType));
@@ -115,7 +115,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
             if (axiosError.response?.status === 400 && (axiosError.response?.data as ErrorResponseBody).errors) {
                 const responseErrors = (axiosError.response?.data as ErrorResponseBody).errors;
                 if (responseErrors) {
-                    Object.keys(responseErrors as Record<string, string[]>).forEach((key) => {
+                    Object.keys(responseErrors).forEach((key) => {
                         const result = key.match(/\[([0-9]+)\]\.([a-zA-Z0-9]+)/);
                         if (!result) return;
                         const [_, index, property] = result;
@@ -127,7 +127,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
                 }
             } else {
                 notificationStore.addNotification({
-                    text: t('errorContactSupport'),
+                    text: t('savingFailed'),
                     type: 'error',
                 });
             }
@@ -150,9 +150,13 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         isLoading.value = false;
     }
 
-    (async () => {
-        if (editId) load();
-    })();
+    async function onInit(): Promise<void> {
+        if (editId){
+            await load();
+        }
+    };
+
+    void onInit();
 
     return {
         emit,

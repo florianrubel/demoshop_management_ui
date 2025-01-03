@@ -2,8 +2,10 @@
     --color-surface: hsl(0, 0%, 95%);
     --color-on-surface: hsl(0, 0%, 11%);
     --color-on-background: hsl(0, 0%, 95%);
+    --color-on-background-dark: hsl(0, 0%, 75%);
     
     --color-neutral: hsl(219, 11%, 45%);
+    --color-neutral-light: hsl(219, 11%, 90%);
     --color-disabled: hsl(219, 11%, 65%);
 
     --color-borders: hsl(220, 13%, 75%);
@@ -73,6 +75,7 @@
     --size-checkbox: 18px;
 
     --border-radius: 8px;
+    --border-radius-input: calc(var(--height-input) / 2);
 
     --spacing: 20px;
 
@@ -81,6 +84,8 @@
     --screen-md: 768px;
     --screen-lg: 1024px;
     --screen-xl: 1280px;
+
+    --transition-duration: 0.3s;
 
     --z-index-main-nav: 10;
     --z-index-sticky: 2;

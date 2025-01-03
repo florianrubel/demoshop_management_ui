@@ -11,7 +11,7 @@ import {
 
 import type { PaginationItemDefinition } from '~/interfaces/pagination';
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:model-value']);
 
 interface Props {
     modelValue: number;
@@ -80,7 +80,7 @@ const isFirstPage = computed<boolean>(() => props.modelValue === 1);
 const isLastPage = computed<boolean>(() => props.modelValue === props.pages);
 
 function emitInput(value: number): void {
-    emits('update:modelValue', value);
+    emits('update:model-value', value);
 }
 </script>
 
