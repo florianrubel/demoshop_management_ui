@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ViewStringProperty } from '~/sharedLib/api/src/interfaces/pim/properties/stringProperty';
-import type { DataTableAction, DataTableActionEvent } from '~/interfaces/dataTable';
+import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~api/interfaces/pim/properties/stringProperty';
+import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
+import type { SearchParameters } from '~api/interfaces/api';
 
-import StringPropertyService from '~/sharedLib/api/src/services/pim/properties/stringPropertyService';
+import StringPropertyService from '~api/services/pim/properties/stringPropertyService';
 
 import { PencilIcon, PlusIcon } from '~/helpers/icons';
 
 import { useAuthenticationStore } from '~/store/authentication';
-import { useNotificationStore } from '~/store/notifications';
+
+import useEditable from '~/composables/createEdit';
+import useSearchable from '~/composables/searchable';
 
 import CreatePatchStringProperty from '~/components/products/properties/stringProperty/CreatePatchStringProperty.vue';
 import ControlBar from '~/components/layout/ControlBar.vue';
@@ -22,83 +25,49 @@ import DataTableColumn from '~/components/layout/dataTable/DataTableColumn.vue';
 const { t } = useI18n();
 
 const authenticationStore = useAuthenticationStore();
-const notificationStore = useNotificationStore();
 
 const stringPropertyService = new StringPropertyService(
     () => authenticationStore.setUser(),
     () => authenticationStore.deleteUser(),
 );
+const searchable = useSearchable<
+    ViewStringProperty,
+    CreateStringProperty,
+    PatchStringProperty,
+    SearchParameters
+>({ service: stringPropertyService });
 
-const stringProperties = ref<ViewStringProperty[]>([]);
-const isLoading = ref<boolean>(false);
-const showCreate = ref<boolean>(false);
-const showEditFor = ref<string | null | undefined>(null);
-const searchTimeout = ref<NodeJS.Timeout | undefined>(undefined);
-const searchQuery = ref<string>('');
-const searchAbortController = ref<AbortController | null>(null);
+const editable = useEditable(searchable.load);
 
-const headers = computed<string[]>(() => [
-    t('name'),
-    t('allowedValues'),
-    t('createdAt'),
-    t('updatedAt'),
+const headers = computed<DataTableHeader[]>(() => [
+    { label: t('name'), property: 'name', allowSorting: true },
+    { label: t('allowedValues') },
+    { label: t('createdAt'), property: 'createdAt', allowSorting: true },
+    { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
 ]);
 
 const dataTableActions: DataTableAction[] = [
     { name: 'edit', icon: PencilIcon },
 ];
 
-async function load(): Promise<void> {
-    isLoading.value = true;
-    try {
-        if (searchAbortController.value) searchAbortController.value.abort();
-        searchAbortController.value = new AbortController();
-        const res = await stringPropertyService.getMultiple({
-            searchQuery: searchQuery.value,
-        }, searchAbortController.value.signal);
-        stringProperties.value = res.data;
-    } catch {
-        notificationStore.addNotification({
-            text: t('dataNotLoaded'),
-            type: 'error',
-        });
-    }
-    searchAbortController.value = null;
-    isLoading.value = false;
-}
-
-function hideCreateEdit(loadData?: boolean) {
-    showCreate.value = false;
-    showEditFor.value = null;
-    if (loadData) {
-        void load();
-    }
-}
-
 function handleDataTableAction(actionEvent: DataTableActionEvent) {
     if (actionEvent.name === 'edit') {
-        showEditFor.value = actionEvent.value;
+        editable.showEditFor.value = actionEvent.value;
     }
 }
 
-function delayedSearch(){
-    searchTimeout.value = setTimeout(() => {
-        void load();
-    }, 1000);
-}
-
-void load();
+void searchable.load();
 </script>
 
 <template lang="pug">
 ControlBar(
-    v-model:search-query="searchQuery"
+    v-model:search-query="searchable.searchQuery.value"
     :title="t('stringProperties')"
     :show-search="true"
-    @update:search-query="delayedSearch"
+    @update:search-query="searchable.delayedLoad"
 )
     template(#actions)
-        Button(@click="showCreate = true")
+        Button(@click="editable.showCreate.value = true")
             template(#iconLeft)
                 PlusIcon(class="icon")
             template(#default) {{ t('create') }}
@@ -106,11 +75,11 @@ ControlBar(
 DataTable(
     :headers
     class="margin-top"
-    :loading="isLoading"
+    :loading="searchable.isLoading.value"
     :has-actions="true"
 )
     DataTableRow(
-        v-for="stringProperty in stringProperties"
+        v-for="stringProperty in searchable.records.value"
         :key="stringProperty.id"
         :actions="dataTableActions"
         :value="stringProperty.id"
@@ -134,9 +103,9 @@ DataTable(
 
 
 CreatePatchStringProperty(
-    v-if="showCreate || showEditFor"
-    :edit-id="showEditFor"
-    @cancel="hideCreateEdit()"
-    @saved="hideCreateEdit(true)"
+    v-if="editable.showCreate.value || editable.showEditFor.value"
+    :edit-id="editable.showEditFor.value"
+    @cancel="editable.hideCreateEdit()"
+    @saved="editable.hideCreateEdit(true)"
 )
 </template>

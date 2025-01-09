@@ -18,7 +18,7 @@ export function sortAsc(value: never[]) {
 }
 
 export function getAvailableLanguages(): string[] {
-    return import.meta.env.VITE_LANGUAGES.split(',');
+    return import.meta.env.VITE_CONTENT_LANGUAGES.split(',');
 }
 
 export function getDefaultDescriptionLocalized() {

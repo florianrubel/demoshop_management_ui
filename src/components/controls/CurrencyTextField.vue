@@ -2,10 +2,7 @@
 import {
     computed, withDefaults, ref,
 } from 'vue';
-
-import type { SelectOption } from '~/interfaces/ui';
-
-import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
+import { useCurrencyInput, ValueScaling } from 'vue-currency-input';
 
 import { getUniqueId } from '~/helpers/misc';
 
@@ -13,8 +10,6 @@ const emit = defineEmits(['update:model-value', 'focus', 'blur', 'enter', 'keyup
 
 interface Props {
     modelValue?: string | number | null;
-    type?: string;
-    maxLength?: number;
     min?: number;
     max?: number;
     label?: string;
@@ -23,13 +18,10 @@ interface Props {
     readonly?: boolean;
     required?: boolean;
     success?: boolean;
-    options?: SelectOption<string>[];
     errors?: string[];
 }
 const props = withDefaults(defineProps<Props>(), {
     modelValue: null,
-    type: 'text',
-    maxLength: DEFAULT_INPUT_MAX_LENGTH,
     min: undefined,
     max: undefined,
     label: undefined,
@@ -38,13 +30,19 @@ const props = withDefaults(defineProps<Props>(), {
     readonly: false,
     required: false,
     success: false,
-    options: () => [],
     errors: () => [],
 });
 
 const id = ref<string>(getUniqueId());
 const isFocused = ref<boolean>(false);
-const canShowOptions = ref<boolean>(false);
+const { inputRef } = useCurrencyInput({
+    currency: 'EUR',
+    autoDecimalDigits: true,
+    hideCurrencySymbolOnFocus: false,
+    hideGroupingSeparatorOnFocus: false,
+    hideNegligibleDecimalDigitsOnFocus: false,
+    valueScaling: ValueScaling.precision,
+});
 
 const classes = computed<string[]>(() => {
     const tmp = [];
@@ -59,18 +57,13 @@ function emitInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     emit('update:model-value', target.value);
 }
-function emitInputWithValue(value: string | null): void {
-    emit('update:model-value', value);
-}
 function emitFocus(event: Event) {
     isFocused.value = true;
-    canShowOptions.value = true;
     (event.target as HTMLInputElement).select();
     emit('focus', event);
 }
 function emitBlur(event: Event) {
     isFocused.value = false;
-    canShowOptions.value = false;
     emit('blur', event);
 }
 function emitEnter() {
@@ -93,19 +86,6 @@ div(
             class="text--primary"
         ) *
 
-    div(
-        v-if="props.options.length > 0 && canShowOptions"
-        class="text-field__options"
-    )
-        button(
-            v-for="option in props.options"
-            :key="option.value || ''"
-            data-name="optionButton"
-            class="text-field__option"
-            type="button"
-            @mousedown="emitInputWithValue(option.value)"
-        ) {{ option.label }}
-
     div(class="text-field__input")
         div(
             v-if="$slots.iconLeft"
@@ -115,15 +95,14 @@ div(
 
         input(
             :id
-            :type="props.type"
-            :maxlength="props.maxLength"
+            ref="inputRef"
+            :type="'text'"
             :min="props.min"
             :max="props.max"
             :placeholder="props.placeholder"
             :value="props.modelValue"
             :disabled="props.disabled"
             :readonly="props.readonly"
-            :autocomplete="props.options.length > 0 ? 'off' : 'on'"
             @input="emitInput"
             @focus="emitFocus"
             @blur="emitBlur"

@@ -1,10 +1,11 @@
 .control-bar {
     display: flex;
     gap: var(--spacing);
+    padding: var(--spacing);
     position: fixed;
-    right: var(--spacing);
-    top: var(--spacing);
-    width: calc(100vw - var(--spacing) - var(--width-main-nav));
+    right: 0;
+    top: 0;
+    width: calc(100vw - (var(--spacing) * 2) - var(--width-main-nav));
 
     &__title {
         align-items: center;

@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ViewBooleanProperty } from '~/sharedLib/api/src/interfaces/pim/properties/booleanProperty';
-import type { DataTableAction, DataTableActionEvent } from '~/interfaces/dataTable';
+import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
+import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~api/interfaces/pim/properties/booleanProperty';
+import type { SearchParameters } from '~api/interfaces/api';
 
-import BooleanPropertyService from '~/sharedLib/api/src/services/pim/properties/booleanPropertyService';
+import BooleanPropertyService from '~api/services/pim/properties/booleanPropertyService';
 
 import { PencilIcon, PlusIcon } from '~/helpers/icons';
 
 import { useAuthenticationStore } from '~/store/authentication';
-import { useNotificationStore } from '~/store/notifications';
+
+import useEditable from '~/composables/createEdit';
+import useSearchable from '~/composables/searchable';
 
 import CreatePatchBooleanProperty from '~/components/products/properties/booleanProperty/CreatePatchBooleanProperty.vue';
 import ControlBar from '~/components/layout/ControlBar.vue';
@@ -18,120 +21,88 @@ import Button from '~/components/controls/Button.vue';
 import DataTable from '~/components/layout/dataTable/DataTable.vue';
 import DataTableRow from '~/components/layout/dataTable/DataTableRow.vue';
 import DataTableColumn from '~/components/layout/dataTable/DataTableColumn.vue';
+import LoadingWrapper from '~/components/layout/LoadingWrapper.vue';
 
 const { t } = useI18n();
 
 const authenticationStore = useAuthenticationStore();
-const notificationStore = useNotificationStore();
 
 const booleanPropertyService = new BooleanPropertyService(
     () => authenticationStore.setUser(),
     () => authenticationStore.deleteUser(),
 );
+const searchable = useSearchable<
+    ViewBooleanProperty,
+    CreateBooleanProperty,
+    PatchBooleanProperty,
+    SearchParameters
+>({ service: booleanPropertyService });
 
-const booleanProperties = ref<ViewBooleanProperty[]>([]);
-const isLoading = ref<boolean>(false);
-const showCreate = ref<boolean>(false);
-const showEditFor = ref<string | null | undefined>(null);
-const searchTimeout = ref<NodeJS.Timeout | undefined>(undefined);
-const searchQuery = ref<string>('');
-const searchAbortController = ref<AbortController | null>(null);
+const editable = useEditable(searchable.load);
 
-const headers = computed<string[]>(() => [
-    t('name'),
-    t('createdAt'),
-    t('updatedAt'),
+const headers = computed<DataTableHeader[]>(() => [
+    { label: t('name'), property: 'name', allowSorting: true },
+    { label: t('createdAt'), property: 'createdAt', allowSorting: true },
+    { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
 ]);
 
 const dataTableActions: DataTableAction[] = [
     { name: 'edit', icon: PencilIcon },
 ];
 
-async function load(): Promise<void> {
-    isLoading.value = true;
-    try {
-        if (searchAbortController.value) searchAbortController.value.abort();
-        searchAbortController.value = new AbortController();
-        const res = await booleanPropertyService.getMultiple({
-            searchQuery: searchQuery.value,
-        }, searchAbortController.value.signal);
-        booleanProperties.value = res.data;
-    } catch {
-        notificationStore.addNotification({
-            text: t('dataNotLoaded'),
-            type: 'error',
-        });
-    }
-    searchAbortController.value = null;
-    isLoading.value = false;
-}
-
-function hideCreateEdit(loadData?: boolean) {
-    showCreate.value = false;
-    showEditFor.value = null;
-    if (loadData) {
-        void load();
-    }
-}
 
 function handleDataTableAction(actionEvent: DataTableActionEvent) {
     if (actionEvent.name === 'edit') {
-        showEditFor.value = actionEvent.value;
+        editable.showEditFor.value = actionEvent.value;
     }
 }
 
-function delayedSearch(){
-    searchTimeout.value = setTimeout(() => {
-        void load();
-    }, 1000);
-}
-
-void load();
+void searchable.load();
 </script>
 
 <template lang="pug">
 ControlBar(
-    v-model:search-query="searchQuery"
+    v-model:search-query="searchable.searchQuery.value"
     :title="t('booleanProperties')"
     :show-search="true"
-    @update:search-query="delayedSearch"
+    @update:search-query="searchable.delayedLoad"
 )
     template(#actions)
-        Button(@click="showCreate = true")
+        Button(@click="editable.showCreate.value = true")
             template(#iconLeft)
                 PlusIcon(class="icon")
             template(#default) {{ t('create') }}
 
-DataTable(
-    :headers
-    class="margin-top"
-    :loading="isLoading"
-    :has-actions="true"
-)
-    DataTableRow(
-        v-for="booleanProperty in booleanProperties"
-        :key="booleanProperty.id"
-        :actions="dataTableActions"
-        :value="booleanProperty.id"
-        @action="handleDataTableAction"
+LoadingWrapper(:is-loading="searchable.isLoading.value")
+    DataTable(
+        :headers
+        class="margin-top"
+        :has-actions="true"
     )
-        DataTableColumn(
-            :value="booleanProperty.name"
+        DataTableRow(
+            v-for="booleanProperty in searchable.records.value"
+            :key="booleanProperty.id"
+            :actions="dataTableActions"
+            :value="booleanProperty.id"
+            @action="handleDataTableAction"
         )
-        DataTableColumn(
-            :value="booleanProperty.createdAt"
-            format="datetime"
-        )
-        DataTableColumn(
-            :value="booleanProperty.updatedAt"
-            format="datetime"
-        )
+            DataTableColumn(
+                :value="booleanProperty.name"
+            )
+            DataTableColumn(
+                :value="booleanProperty.createdAt"
+                format="datetime"
+            )
+            DataTableColumn(
+                :value="booleanProperty.updatedAt"
+                format="datetime"
+            )
 
 
 CreatePatchBooleanProperty(
-    v-if="showCreate || showEditFor"
-    :edit-id="showEditFor"
-    @cancel="hideCreateEdit()"
-    @saved="hideCreateEdit(true)"
+    v-if="editable.showCreate.value || editable.showEditFor.value"
+    :edit-id="editable.showEditFor.value"
+    @cancel="editable.hideCreateEdit()"
+    @saved="editable.hideCreateEdit(true)"
 )
 </template>

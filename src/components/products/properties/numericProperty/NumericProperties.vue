@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ViewNumericProperty } from '~/sharedLib/api/src/interfaces/pim/properties/numericProperty';
-import type { DataTableAction, DataTableActionEvent } from '~/interfaces/dataTable';
+import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~api/interfaces/pim/properties/numericProperty';
+import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
+import type { SearchParameters } from '~api/interfaces/api';
 
-import NumericPropertyService from '~/sharedLib/api/src/services/pim/properties/numericPropertyService';
+import NumericPropertyService from '~api/services/pim/properties/numericPropertyService';
 
 import { PencilIcon, PlusIcon } from '~/helpers/icons';
 
 import { useAuthenticationStore } from '~/store/authentication';
-import { useNotificationStore } from '~/store/notifications';
+
+import useEditable from '~/composables/createEdit';
+import useSearchable from '~/composables/searchable';
 
 import CreatePatchNumericProperty from '~/components/products/properties/numericProperty/CreatePatchNumericProperty.vue';
 import ControlBar from '~/components/layout/ControlBar.vue';
@@ -22,84 +25,51 @@ import DataTableColumn from '~/components/layout/dataTable/DataTableColumn.vue';
 const { t } = useI18n();
 
 const authenticationStore = useAuthenticationStore();
-const notificationStore = useNotificationStore();
 
 const numericPropertyService = new NumericPropertyService(
     () => authenticationStore.setUser(),
     () => authenticationStore.deleteUser(),
 );
 
-const numericProperties = ref<ViewNumericProperty[]>([]);
-const isLoading = ref<boolean>(false);
-const showCreate = ref<boolean>(false);
-const showEditFor = ref<string | null | undefined>(null);
-const searchTimeout = ref<NodeJS.Timeout | undefined>(undefined);
-const searchQuery = ref<string>('');
-const searchAbortController = ref<AbortController | null>(null);
+const searchable = useSearchable<
+    ViewNumericProperty,
+    CreateNumericProperty,
+    PatchNumericProperty,
+    SearchParameters
+>({ service: numericPropertyService });
 
-const headers = computed<string[]>(() => [
-    t('name'),
-    t('minValue'),
-    t('maxValue'),
-    t('createdAt'),
-    t('updatedAt'),
+const editable = useEditable(searchable.load);
+
+const headers = computed<DataTableHeader[]>(() => [
+    { label: t('name'), property: 'name', allowSorting: true },
+    { label: t('minValue'), property: 'createdAt', allowSorting: true },
+    { label: t('maxValue'), property: 'createdAt', allowSorting: true },
+    { label: t('createdAt'), property: 'createdAt', allowSorting: true },
+    { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
 ]);
 
 const dataTableActions: DataTableAction[] = [
     { name: 'edit', icon: PencilIcon },
 ];
 
-async function load(): Promise<void> {
-    isLoading.value = true;
-    try {
-        if (searchAbortController.value) searchAbortController.value.abort();
-        searchAbortController.value = new AbortController();
-        const res = await numericPropertyService.getMultiple({
-            searchQuery: searchQuery.value,
-        }, searchAbortController.value.signal);
-        numericProperties.value = res.data;
-    } catch {
-        notificationStore.addNotification({
-            text: t('dataNotLoaded'),
-            type: 'error',
-        });
-    }
-    searchAbortController.value = null;
-    isLoading.value = false;
-}
-
-function hideCreateEdit(loadData?: boolean) {
-    showCreate.value = false;
-    showEditFor.value = null;
-    if (loadData) {
-        void load();
-    }
-}
-
 function handleDataTableAction(actionEvent: DataTableActionEvent) {
     if (actionEvent.name === 'edit') {
-        showEditFor.value = actionEvent.value;
+        editable.showEditFor.value = actionEvent.value;
     }
 }
 
-function delayedSearch(){
-    searchTimeout.value = setTimeout(() => {
-        void load();
-    }, 1000);
-}
-
-void load();
+void searchable.load();
 </script>
 
 <template lang="pug">
 ControlBar(
-    v-model:search-query="searchQuery"
+    v-model:search-query="searchable.searchQuery.value"
     :title="t('numericProperties')"
     :show-search="true"
-    @update:search-query="delayedSearch"
+    @update:search-query="searchable.delayedLoad"
 )
     template(#actions)
-        Button(@click="showCreate = true")
+        Button(@click="editable.showCreate.value = true")
             template(#iconLeft)
                 PlusIcon(class="icon")
             template(#default) {{ t('create') }}
@@ -107,11 +77,11 @@ ControlBar(
 DataTable(
     :headers
     class="margin-top"
-    :loading="isLoading"
+    :loading="searchable.isLoading.value"
     :has-actions="true"
 )
     DataTableRow(
-        v-for="numericProperty in numericProperties"
+        v-for="numericProperty in searchable.records.value"
         :key="numericProperty.id"
         :actions="dataTableActions"
         :value="numericProperty.id"
@@ -137,9 +107,9 @@ DataTable(
 
 
 CreatePatchNumericProperty(
-    v-if="showCreate || showEditFor"
-    :edit-id="showEditFor"
-    @cancel="hideCreateEdit()"
-    @saved="hideCreateEdit(true)"
+    v-if="editable.showCreate.value || editable.showEditFor.value"
+    :edit-id="editable.showEditFor.value"
+    @cancel="editable.hideCreateEdit()"
+    @saved="editable.hideCreateEdit(true)"
 )
 </template>

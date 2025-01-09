@@ -19,22 +19,17 @@
         box-sizing: border-box;
         max-height: 100vh;
         margin: 0 auto;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden;
         padding: calc(var(--spacing) * 2) var(--spacing);
         position: relative;
         width: clamp(300px, 50vw, 600px);
     }
 
-    &--full-width {
+    &--full-size {
         .dialog__content {
+            height: 100vh;
             max-width: none;
             width: 100%;
-        }
-    }
-    &--large {
-        .dialog__content {
-            width: clamp(300px, 50vw, 1000px);
         }
     }
 }

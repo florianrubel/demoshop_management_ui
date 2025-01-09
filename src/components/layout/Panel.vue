@@ -15,6 +15,7 @@ interface Props {
     saveAndCancel?: boolean;
     disableSaving?: boolean;
     isLoading?: boolean;
+    scrollOverflow?: boolean;
 }
 const props = defineProps<Props>();
 
@@ -22,6 +23,7 @@ const emit = defineEmits(['close', 'save']);
 
 const classes = computed<string[]>(() => {
     if (props.embedded) return ['panel--embedded'];
+    if (props.scrollOverflow) return ['panel--scroll-overflow'];
     return [];
 });
 </script>
@@ -42,10 +44,11 @@ div(
             @click="emit('close')"
         )
             XMarkIcon
-    slot
+    div(class="panel__content")
+        slot
     div(
         v-if="props.saveAndCancel"
-        class="margin-top--x2 flex flex--justify-between"
+        class="panel__actions"
     )
         Button(
             :disabled="props.disableSaving"

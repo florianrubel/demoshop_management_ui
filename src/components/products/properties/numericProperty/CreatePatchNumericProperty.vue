@@ -4,12 +4,12 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~/sharedLib/api/src/interfaces/pim/properties/numericProperty';
-import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
+import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~api/interfaces/pim/properties/numericProperty';
+import type { SearchParameters } from '~api/interfaces/api';
 
 import { DEFAULT_INPUT_MAX_LENGTH, DEFAULT_INPUT_MIN_LENGTH } from '~/constants/app';
 
-import NumericPropertyService from '~/sharedLib/api/src/services/pim/properties/numericPropertyService';
+import NumericPropertyService from '~api/services/pim/properties/numericPropertyService';
 
 import { useAuthenticationStore } from '~/store/authentication';
 

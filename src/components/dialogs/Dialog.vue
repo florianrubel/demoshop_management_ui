@@ -11,7 +11,7 @@ const emit = defineEmits(['close', 'save']);
 interface Props {
     position?: string;
     large?: boolean;
-    fullWidth?: boolean;
+    fullSize?: boolean;
     title?: string;
     saveAndCancel?: boolean;
     disableSaving?: boolean;
@@ -23,7 +23,7 @@ const classes = computed<string[]>(() => {
     const tmp: string[] = [];
     if (props.position === 'left') tmp.push('dialog--pull-left');
     if (props.large) tmp.push('dialog--large');
-    if (props.fullWidth) tmp.push('dialog--full-width');
+    if (props.fullSize) tmp.push('dialog--full-size');
     return tmp;
 });
 
@@ -46,6 +46,7 @@ teleport(to="#dialogs")
                 :save-and-cancel="props.saveAndCancel"
                 :disable-saving="props.disableSaving"
                 :is-loading="props.isLoading"
+                :scroll-overflow="true"
                 @close="emit('close')"
                 @save="emit('save')"
             )

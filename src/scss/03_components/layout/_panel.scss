@@ -3,7 +3,6 @@
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-default);
     overflow: hidden;
-    padding: var(--spacing);
     position: relative;
 
     &--embedded {
@@ -16,12 +15,37 @@
         background: var(--color-primary);
         display: flex;
         justify-content: space-between;
-        margin: calc(var(--spacing) * -1);
+        margin: 0;
         margin-bottom: var(--spacing);
         padding-left: var(--spacing);
+        position: sticky;
+        top: 0;
+        z-index: 2;
 
         & > * {
             color: var(--color-on-background);
         }
+    }
+
+    &__content {
+        padding: var(--spacing);
+    }
+
+    &__actions {
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-borders);
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        left: calc(var(--spacing) * -1);
+        margin-top: var(--spacing);
+        padding: var(--spacing);
+        position: sticky;
+    }
+
+    &--scroll-overflow {
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: calc(100% - (var(--spacing) * 2));
     }
 }

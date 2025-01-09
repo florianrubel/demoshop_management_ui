@@ -27,8 +27,26 @@
         text-align: center;
     }
 
+    &--small {
+        font-size: var(--font-size-small);
+        line-height: var(--line-height-small);
+    }
+
     &--large {
         font-size: var(--font-size-large);
         line-height: var(--line-height-large);
+    }
+
+    &--center {
+        text-align: center;
+    }
+
+    &--right {
+        text-align: right;
+    }
+
+    &--ellipsis {
+        text-overflow: ellipsis;
+        width: 100%;
     }
 }

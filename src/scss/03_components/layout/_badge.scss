@@ -1,0 +1,21 @@
+.badge {
+    background-color: var(--color-primary);
+    color: var(--color-on-background);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    border-radius: var(--font-size-small);
+    padding: 2px calc(var(--line-height-small) / 2);
+
+    &--info {
+        background: var(--color-info);
+    }
+    &--success {
+        background: var(--color-success);
+    }
+    &--warning {
+        background: var(--color-warning);
+    }
+    &--error {
+        background: var(--color-error);
+    }
+}

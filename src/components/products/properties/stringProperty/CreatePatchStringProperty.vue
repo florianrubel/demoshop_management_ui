@@ -5,12 +5,12 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~/sharedLib/api/src/interfaces/pim/properties/stringProperty';
-import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
+import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~api/interfaces/pim/properties/stringProperty';
+import type { SearchParameters } from '~api/interfaces/api';
 
 import { DEFAULT_INPUT_MAX_LENGTH, DEFAULT_INPUT_MIN_LENGTH } from '~/constants/app';
 
-import StringPropertyService from '~/sharedLib/api/src/services/pim/properties/stringPropertyService';
+import StringPropertyService from '~api/services/pim/properties/stringPropertyService';
 
 import { useAuthenticationStore } from '~/store/authentication';
 

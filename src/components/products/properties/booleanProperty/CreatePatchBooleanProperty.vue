@@ -4,12 +4,12 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~/sharedLib/api/src/interfaces/pim/properties/booleanProperty';
-import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
+import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~api/interfaces/pim/properties/booleanProperty';
+import type { SearchParameters } from '~api/interfaces/api';
 
 import { DEFAULT_INPUT_MAX_LENGTH, DEFAULT_INPUT_MIN_LENGTH } from '~/constants/app';
 
-import BooleanPropertyService from '~/sharedLib/api/src/services/pim/properties/booleanPropertyService';
+import BooleanPropertyService from '~api/services/pim/properties/booleanPropertyService';
 
 import { useAuthenticationStore } from '~/store/authentication';
 

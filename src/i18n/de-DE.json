@@ -30,5 +30,13 @@
     "editBooleanProperty": "Ja / Nein Eigenschaft bearbeiten",
     "allowedValues": "Erlaubte Werte",
     "addValue": "Wert hinzufügen",
-    "noRestrictions": "Keine Einschränkungen"
+    "noRestrictions": "Keine Einschränkungen",
+    "products": "Produkte",
+    "defaultPrice": "Standard-Preis",
+    "description": "Beschreibung",
+    "missing": "fehlend",
+    "editProduct": "Product bearbeiten",
+    "createProduct": "Product erstellen",
+    "price": "Preis",
+    "productVariants": "Produkt-Varianten"
 }

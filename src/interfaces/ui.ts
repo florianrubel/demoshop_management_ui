@@ -16,3 +16,7 @@ export interface Notification {
     type: NotificationType;
     text: string;
 }
+
+export type SortingDirection = 'asc' | 'desc';
+
+export type StatusType = 'primary' | 'info' | 'success' | 'warning' | 'error';
