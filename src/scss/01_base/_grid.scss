@@ -9,7 +9,17 @@
         }
     }
 
-    &--cols-1-s-1 {
+    &--cols-1-s-2 {
         grid-template-columns: 1fr auto 2fr;
+    }
+
+    &--full-width {
+        width: 100%;
+    }
+    &--full-height {
+        height: calc(100%);
+    }
+    &--fix-full-height {
+        height: calc(100%);
     }
 }

@@ -15,17 +15,20 @@ const emit = defineEmits<{
 </script>
 
 <template lang="pug">
-tr(class="data-table__row")
     slot
     DataTableActions(v-if="props.actions")
-        Button(
+        template(
             v-for="action in props.actions"
-            :key="action.name"
-            :blank="true"
-            @click="emit('action', { name: action.name, value: props.value })"
         )
-            component(
-                :is="action.icon"
-                v-if="action.icon"
+            Button(
+                v-if="value && (!action.conditionalFunction || action.conditionalFunction(props.value))"
+                :key="action.name"
+                :blank="true"
+                :title="action.label"
+                @click="emit('action', { name: action.name, value: props.value })"
             )
+                component(
+                    :is="action.icon"
+                    v-if="action.icon"
+                )
 </template>

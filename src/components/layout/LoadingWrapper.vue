@@ -7,7 +7,10 @@ const props = defineProps<{
 </script>
 
 <template lang="pug">
-div(class="loading-wrapper" :class="{'loading-wrapper--is-loading': props.isLoading}")
+div(
+    class="loading-wrapper"
+    :class="{'loading-wrapper--is-loading': props.isLoading}"
+)
     slot
     div(class="loading-wrapper__loader")
         LoadingIndicatorCircle

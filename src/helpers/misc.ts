@@ -1,3 +1,5 @@
+import { getContentLanguages } from '~/helpers/env';
+
 export function getUniqueId(): string {
     return `_${Math.random().toString(36).substr(2, 9)}`;
 }
@@ -17,14 +19,10 @@ export function sortAsc(value: never[]) {
     return copy;
 }
 
-export function getAvailableLanguages(): string[] {
-    return import.meta.env.VITE_CONTENT_LANGUAGES.split(',');
-}
-
 export function getDefaultDescriptionLocalized() {
     const tmp: Record<string, string> = {};
 
-    getAvailableLanguages().forEach((language) => {
+    getContentLanguages().forEach((language) => {
         tmp[language] = '';
     });
 

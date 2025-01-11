@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import VueClickAway from 'vue3-click-away';
 
 import i18n from '~/i18n';
 
@@ -16,6 +17,7 @@ app
     .use(createPinia())
     .use(router)
     .use(i18n)
+    .use(VueClickAway)
     .directive('sanitize-html', vSanitizeHtml as never);
 
 app.mount('#app');

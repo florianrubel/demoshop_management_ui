@@ -1,4 +1,8 @@
 .loading-wrapper {
+    display: flex;
+    flex-shrink: 1;
+    height: 100%;
+    overflow: auto;
     position: relative;
 
     &__loader {
@@ -16,6 +20,7 @@
         right: 0;
         transition: opacity var(--transition-duration);
         top: 0;
+        z-index: 9999;
     }
 
     &--is-loading {

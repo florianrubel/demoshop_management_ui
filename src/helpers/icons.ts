@@ -1,5 +1,6 @@
 export {
     AdjustmentsHorizontalIcon,
+    ArrowUturnLeftIcon,
     AtSymbolIcon,
     CheckIcon,
     ChevronDoubleLeftIcon,
@@ -16,6 +17,7 @@ export {
     InformationCircleIcon,
     HomeIcon,
     KeyIcon,
+    MagnifyingGlassIcon,
     PencilIcon,
     PlusIcon,
     PowerIcon,

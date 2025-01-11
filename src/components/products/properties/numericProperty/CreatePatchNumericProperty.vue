@@ -59,7 +59,7 @@ const form = useForm<ViewNumericProperty, CreateNumericProperty, PatchNumericPro
     editId: props.editId,
 });
 
-const dialogTitle = computed<string>(() => (props.editId ? t('editBooleanProperty') : t('createBooleanProperty')));
+const dialogTitle = computed<string>(() => (props.editId ? t('editNumericProperty') : t('createNumericProperty')));
 </script>
 
 <template lang="pug">

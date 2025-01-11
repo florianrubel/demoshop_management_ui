@@ -7,7 +7,8 @@ import type { ViewProduct } from '~/sharedLib/api/src/interfaces/pim/product';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
 import type { SortingDirection } from '~/interfaces/ui';
 
-import { CheckIcon, PencilIcon, XMarkIcon } from '~/helpers/icons';
+import { CheckIcon, InformationCircleIcon, PencilIcon, XMarkIcon } from '~/helpers/icons';
+import { getCdnBaseUrl } from '~/helpers/env';
 
 import { useAuthenticationStore } from '~/store/authentication';
 
@@ -25,6 +26,9 @@ import LoadingWrapper from '~/components/layout/LoadingWrapper.vue';
 import DataTable from '~/components/layout/dataTable/DataTable.vue';
 import DataTableRow from '~/components/layout/dataTable/DataTableRow.vue';
 import DataTableColumn from '~/components/layout/dataTable/DataTableColumn.vue';
+import CreatePatchProductVariant from '~/components/products/productVariants/CreatePatchProductVariant.vue';
+
+const CDN_BASE_URL = getCdnBaseUrl();
 
 const { t } = useI18n();
 
@@ -67,9 +71,10 @@ async function triggerHydration() {
 }
 
 const headers = computed<DataTableHeader[]>(() => [
-    { label: t('price'), property: 'priceInCents', allowSorting: true },
+    { label: t('picture') },
+    { label: t('price'), property: 'priceInCents', allowSorting: true, align: 'right' },
     ...productVariantFactory.booleanProperties.value.map(({ name }) => ({ label: name, property: `booleanProperties.${name}`, allowSorting: true })),
-    ...productVariantFactory.numericProperties.value.map(({ name }) => ({ label: name, property: `numericProperties.${name}`, allowSorting: true })),
+    ...productVariantFactory.numericProperties.value.map(({ name }) => ({ label: name, property: `numericProperties.${name}`, allowSorting: true, align: 'right' })),
     ...productVariantFactory.stringProperties.value.map(({ name }) => ({ label: name, property: `stringProperties.${name}`, allowSorting: true })),
     { label: t('createdAt'), property: 'createdAt', allowSorting: true },
     { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
@@ -113,68 +118,79 @@ void searchable.load();
 </script>
 
 <template lang="pug">
-div(class="flex flex--column flex--gap")
-    h2 {{ t('productVariants') }}
-
-    LoadingWrapper(:is-loading="searchable.isLoading.value")
-        DataTable(
-            v-model:sort-by="sortBy"
-            v-model:sort-direction="sortDirection"
-            :headers
-            :has-actions="true"
-        )
-            DataTableRow(
-                v-for="productVariant in productVariantFactory.hydratedProductVariants.value"
-                :key="productVariant.id"
-                :actions="dataTableActions"
-                :value="productVariant.id"
-                @action="handleDataTableAction"
+div(class="flex flex--column flex--gap flex--fix-full-height")
+    div
+        h2 {{ t('productVariants') }}
+        div(class="flex flex--gap-f2 text--neutral")
+            InformationCircleIcon(class="icon")
+            span {{ t('horizontalScrollHint') }}
+    div(class="overflow--hidden flex flex--full-height")
+        LoadingWrapper(:is-loading="searchable.isLoading.value")
+            DataTable(
+                v-model:sort-by="sortBy"
+                v-model:sort-direction="sortDirection"
+                :headers
+                :has-actions="true"
             )
-                DataTableColumn(
-                    :value="productVariant.priceInCents"
-                    format="price"
-                    align="right"
+                DataTableRow(
+                    v-for="productVariant in productVariantFactory.hydratedProductVariants.value"
+                    :key="productVariant.id"
+                    :actions="dataTableActions"
+                    :value="productVariant.id"
+                    @action="handleDataTableAction"
                 )
-
-                DataTableColumn(
-                    v-for="property in productVariantFactory.booleanProperties.value"
-                    :key="property.id"
-                )
-                    CheckIcon(
-                        v-if="productVariant.booleanProperties[property.name].value"
-                        class="icon text--success"
-                    )
-                    XMarkIcon(
-                        v-else
-                        class="icon text--error"
+                    DataTableColumn(
+                        :value="`${CDN_BASE_URL}/${productVariant.listPicture}`"
+                        format="picture"
                     )
 
-                DataTableColumn(
-                    v-for="property in productVariantFactory.numericProperties.value"
-                    :key="property.id"
-                    format="number"
-                    :value="productVariant.numericProperties[property.name].value"
-                )
-                DataTableColumn(
-                    v-for="property in productVariantFactory.stringProperties.value"
-                    :key="property.id"
-                    :value="productVariant.stringProperties[property.name].value"
-                )
+                    DataTableColumn(
+                        :value="productVariant.priceInCents"
+                        format="price"
+                        align="right"
+                    )
 
-                DataTableColumn(
-                    :value="product.createdAt"
-                    format="datetime"
-                )
-                DataTableColumn(
-                    :value="product.updatedAt"
-                    format="datetime"
-                )
+                    DataTableColumn(
+                        v-for="property in productVariantFactory.booleanProperties.value"
+                        :key="property.id"
+                    )
+                        CheckIcon(
+                            v-if="productVariant.booleanProperties[property.name].value"
+                            class="icon text--success"
+                        )
+                        XMarkIcon(
+                            v-else
+                            class="icon text--error"
+                        )
 
-    //- CreatePatchProductVariant(
-    //-     v-if="editable.showCreate.value || editable.showEditFor.value"
-    //-     :edit-id="editable.showEditFor.value"
-    //-     @cancel="editable.hideCreateEdit()"
-    //-     @saved="editable.hideCreateEdit(true)"
-    //- )
+                    DataTableColumn(
+                        v-for="property in productVariantFactory.numericProperties.value"
+                        :key="property.id"
+                        format="number"
+                        :value="productVariant.numericProperties[property.name].value"
+                        align="right"
+                    )
+                    DataTableColumn(
+                        v-for="property in productVariantFactory.stringProperties.value"
+                        :key="property.id"
+                        :value="productVariant.stringProperties[property.name].value"
+                    )
+
+                    DataTableColumn(
+                        :value="product.createdAt"
+                        format="datetime"
+                    )
+                    DataTableColumn(
+                        :value="product.updatedAt"
+                        format="datetime"
+                    )
+
+    CreatePatchProductVariant(
+        v-if="editable.showCreate.value || editable.showEditFor.value"
+        :edit-id="editable.showEditFor.value"
+        :product="props.product"
+        @cancel="editable.hideCreateEdit()"
+        @saved="editable.hideCreateEdit(true)"
+    )
 
 </template>

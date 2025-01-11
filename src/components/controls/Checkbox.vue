@@ -1,28 +1,27 @@
 <script lang="ts" setup>
 import {
-    computed, withDefaults,
+    computed,
 } from 'vue';
 
 import { CheckIcon } from '~/helpers/icons';
 
-const emits = defineEmits(['update:model-value', 'focus', 'blur', 'enter']);
-
 interface Props {
-    modelValue: boolean;
     label?: string;
+    disabled?: boolean;
 }
-const props = withDefaults(defineProps<Props>(), {
-    label: undefined,
-});
+const props = defineProps<Props>();
+
+const model = defineModel<boolean>({ default: false });
 
 const classes = computed<string[]>(() => {
     const tmp: string[] = [];
-    if (props.modelValue) tmp.push('checkbox--checked');
+    if (model.value) tmp.push('checkbox--checked');
+    if (props.disabled) tmp.push('checkbox--disabled');
     return tmp;
 });
 
 function emitInput(): void {
-    emits('update:model-value', !props.modelValue);
+    model.value = !model.value;
 }
 </script>
 
@@ -34,7 +33,7 @@ button(
     @click="emitInput"
 )
     div(class="checkbox__box")
-        CheckIcon(v-if="props.modelValue")
+        CheckIcon(v-if="model")
 
     div(
         v-if="props.label"

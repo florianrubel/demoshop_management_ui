@@ -14,6 +14,9 @@
     &--gap-f4 {
         gap: calc(var(--spacing) / 4);
     }
+    &--gap-x2 {
+        gap: calc(var(--spacing) * 2);
+    }
 
     &--col-gap {
         column-gap: var(--spacing);
@@ -60,6 +63,14 @@
 
     &--wrap {
         flex-wrap: wrap;
+    }
+
+    &--full-height {
+        min-height: 100%;
+    }
+
+    &--fix-full-height {
+        height: 100%;
     }
 
     &__item {

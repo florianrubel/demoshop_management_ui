@@ -8,6 +8,7 @@ import type { SelectOption } from '~/interfaces/ui';
 import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 
 import TextField from '~/components/controls/TextField.vue';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '~/helpers/icons';
 
 const emits = defineEmits(['update:model-value']);
 
@@ -72,11 +73,13 @@ function emitInput(value: string | null | undefined): void {
     expanded.value = false;
 }
 function toggleExpanded(): void {
+    if (props.disabled) return;
     expanded.value = !expanded.value;
 }
 function collapse(): void {
     expanded.value = false;
 }
+
 </script>
 
 <template lang="pug">
@@ -85,6 +88,11 @@ div(
     class="select"
     :class="classes"
 )
+    label(v-if="props.label")
+        span {{ props.label }}
+        span(
+            v-if="props.required"
+            class="text--primary") *
     div(class="select__wrapper")
         div(class="select__options")
             div(class="select__search")
@@ -135,12 +143,6 @@ div(
             div(class="select__value-label") {{ valueLabel }}
             div(class="select__chevron")
                 ChevronDownIcon(class="icon")
-
-    label(v-if="props.label")
-        span {{ props.label }}
-        span(
-            v-if="props.required"
-            class="text--primary") *
 
     div(
         v-for="error in props.errors"

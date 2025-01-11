@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 
 import { AtSymbolIcon, KeyIcon, EyeIcon, EyeSlashIcon } from '~/helpers/icons';
 import { saveTokens } from '~api/helpers/authentication';
+import { getSuperAdminPass, getSuperAdminUser } from '~/helpers/env';
 
 import { useAuthenticationStore } from '~/store/authentication';
 
@@ -15,6 +16,7 @@ import Notification from '~/components/notifications/Notification.vue';
 import Button from '~/components/controls/Button.vue';
 import TextField from '~/components/controls/TextField.vue';
 import BrandLogo from '~/components/navigation/BrandLogo.vue';
+import Panel from '~/components/layout/Panel.vue';
 
 const { t } = useI18n();
 const authenticationStore = useAuthenticationStore();
@@ -26,8 +28,8 @@ interface FormProperties {
 }
 
 const getDefaultFormProperties = (): FormProperties => ({
-    email: import.meta.env.VITE_SUPERADMIN_USER,
-    password: import.meta.env.VITE_SUPERADMIN_PASS,
+    email: getSuperAdminUser(),
+    password: getSuperAdminPass(),
 });
 
 const form = ref<FormProperties>(getDefaultFormProperties());
@@ -61,7 +63,7 @@ async function signIn(): Promise<void> {
 
 <template lang="pug">
 div(class="flex flex--full-size-center-screen")
-    div(class="panel")
+    Panel
         div(class="flex flex--center")
             BrandLogo(:vertical="true")
         div(

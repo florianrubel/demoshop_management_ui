@@ -4,7 +4,8 @@ import { useI18n } from 'vue-i18n';
 
 import type { TabItem } from '~/interfaces/navigation';
 
-import { getAvailableLanguages, getDefaultDescriptionLocalized } from '~/helpers/misc';
+import { getDefaultDescriptionLocalized } from '~/helpers/misc';
+import { getContentLanguages } from '~/helpers/env';
 
 import TextArea from '~/components/controls/TextArea.vue';
 import Tabs from '~/components/navigation/Tabs.vue';
@@ -19,7 +20,7 @@ const props = defineProps<{
 
 const selectedLanguage = ref<string>(locale.value.toString());
 
-const tabs = computed<TabItem<string>[]>(() => getAvailableLanguages().map((language) => ({
+const tabs = computed<TabItem<string>[]>(() => getContentLanguages().map((language) => ({
     value: language,
     label: language,
 })));
@@ -34,7 +35,7 @@ div()
     )
 
     div(
-        v-for="language in getAvailableLanguages()"
+        v-for="language in getContentLanguages()"
         :key="language"
     )
         TextArea(

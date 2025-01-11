@@ -16,7 +16,7 @@
         display: flex;
         justify-content: space-between;
         margin: 0;
-        margin-bottom: var(--spacing);
+        height: var(--height-input);
         padding-left: var(--spacing);
         position: sticky;
         top: 0;
@@ -29,23 +29,42 @@
 
     &__content {
         padding: var(--spacing);
+        overflow: hidden;
     }
 
     &__actions {
         background: var(--color-surface);
-        border-top: 1px solid var(--color-borders);
         bottom: 0;
         display: flex;
         justify-content: space-between;
-        left: calc(var(--spacing) * -1);
+        left: 0;
         margin-top: var(--spacing);
         padding: var(--spacing);
         position: sticky;
+        right: 0;
+
+        hr {
+            left: 0;
+            position: absolute;
+            top: calc((var(--spacing) / 2) * -1);
+        }
     }
 
     &--scroll-overflow {
         overflow-x: hidden;
         overflow-y: auto;
         max-height: calc(100% - (var(--spacing) * 2));
+    }
+
+    &--full-height {
+        min-height: calc(100% - (var(--spacing) * 2));
+    }
+
+    &--fix-full-height {
+        height: calc(100% - var(--spacing));
+
+        .panel__content {
+            height: calc(100% - var(--height-input) - (var(--spacing) * 2) - var(--height-input) - (var(--spacing) * 2));
+        }
     }
 }

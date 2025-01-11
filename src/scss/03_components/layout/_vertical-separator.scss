@@ -1,5 +1,5 @@
 .vertical-separator {
-    background: var(--color-borders);
+    background: radial-gradient(var(--color-borders), rgba(255, 255, 255, 0) 70%);
     height: 100%;
-    width: 1px;
+    width: 3px;
 }

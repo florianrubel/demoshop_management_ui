@@ -2,7 +2,8 @@
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { getDefaultDescriptionLocalized, getAvailableLanguages } from '~/helpers/misc';
+import { getDefaultDescriptionLocalized } from '~/helpers/misc';
+import { getContentLanguages } from '~/helpers/env';
 
 import Button from '~/components/controls/Button.vue';
 import RichTextArea from '~/components/controls/RichTextArea.vue';
@@ -44,7 +45,7 @@ watch(() => props.modelValue, () => {
 div()
     div(class="flex")
         Button(
-                v-for="language in getAvailableLanguages()"
+                v-for="language in getContentLanguages()"
                 :key="language"
                 type="button"
                 :active="language === selectedLanguage"
@@ -52,7 +53,7 @@ div()
             ) {{ language }}
 
     div(
-        v-for="language in getAvailableLanguages()"
+        v-for="language in getContentLanguages()"
         :key="language"
     )
         RichTextArea(

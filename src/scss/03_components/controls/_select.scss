@@ -8,8 +8,6 @@
         line-height: 0.7rem;
         display: inline-block;
         padding: 0 var(--spacing);
-        position: absolute;
-        top: var(--input-label-adjustment);
     }
 
     &__wrapper {
@@ -18,7 +16,8 @@
 
     &__value {
         background: var(--color-surface);
-        border: 1px solid var(--color-borders);
+        border-radius: var(--border-radius-input);
+        box-shadow: var(--shadow-inner);
         border: none;
         color: inherit;
         cursor: pointer;
@@ -35,7 +34,6 @@
         flex-grow: 1;
         height: calc(var(--height-input) - var(--input-label-adjustment));
         line-height: var(--height-input);
-        margin-top: var(--input-label-adjustment);
         overflow: hidden;
         padding: 0 calc(var(--spacing) / 2);
         text-overflow: ellipsis;
@@ -55,10 +53,16 @@
     &__options {
         background: var(--color-surface);
         border: 1px solid var(--color-borders);
+        border-radius: var(--border-radius-input);
+        box-shadow: var(--shadow-default);
         box-sizing: border-box;
         display: none;
         top: 0;
-        padding: calc(var(--height-input) + (var(--spacing) / 2)) 0 calc(var(--spacing) / 2) 0;
+        padding:
+            calc(var(--height-input) + (var(--spacing) / 2))
+            0
+            calc(var(--spacing) / 2)
+            0;
         position: absolute;
         width: 100%;
 
@@ -132,6 +136,19 @@
         }
         .select__chevron {
             transform: rotate(180deg);
+        }
+    }
+
+    &--disabled {
+
+        .select__value {
+            cursor: not-allowed;
+        }
+
+        label,
+        .select__chevron,
+        .select__value-label {
+            color: var(--color-disabled);
         }
     }
 }

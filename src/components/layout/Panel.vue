@@ -16,15 +16,20 @@ interface Props {
     disableSaving?: boolean;
     isLoading?: boolean;
     scrollOverflow?: boolean;
+    fullHeight?: boolean;
+    fixFullHeight?: boolean;
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits(['close', 'save']);
 
 const classes = computed<string[]>(() => {
-    if (props.embedded) return ['panel--embedded'];
-    if (props.scrollOverflow) return ['panel--scroll-overflow'];
-    return [];
+    const tmp: string[] = [];
+    if (props.embedded) tmp.push('panel--embedded');
+    if (props.scrollOverflow) tmp.push('panel--scroll-overflow');
+    if (props.fullHeight) tmp.push('panel--full-height');
+    if (props.fixFullHeight) tmp.push('panel--fix-full-height');
+    return tmp;
 });
 </script>
 
@@ -50,6 +55,7 @@ div(
         v-if="props.saveAndCancel"
         class="panel__actions"
     )
+        hr
         Button(
             :disabled="props.disableSaving"
             type="error"

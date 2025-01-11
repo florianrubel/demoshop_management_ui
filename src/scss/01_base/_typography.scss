@@ -1,5 +1,3 @@
-@import "variables";
-
 .text {
     &--primary {
         color: var(--color-primary) !important;
@@ -12,6 +10,9 @@
     }
     &--error {
         color: var(--color-error) !important;
+    }
+    &--neutral {
+        color: var(--color-neutral) !important;
     }
 
     &--regular {

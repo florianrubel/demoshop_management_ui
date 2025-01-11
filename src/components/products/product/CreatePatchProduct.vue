@@ -22,7 +22,7 @@ import TextField from '~/components/controls/TextField.vue';
 import Dialog from '~/components/dialogs/Dialog.vue';
 import TextAreaLocalized from '~/components/controls/TextAreaLocalized.vue';
 import CurrencyTextField from '~/components/controls/CurrencyTextField.vue';
-import ProductVariantList from '~/components/productVariants/ProductVariantList.vue';
+import ProductVariantList from '~/components/products/productVariants/ProductVariantList.vue';
 
 const { t } = useI18n();
 
@@ -79,7 +79,7 @@ Dialog(
     @close="emit('cancel')"
 )
 
-    div(class="grid grid--cols-1-s-1")
+    div(class="grid grid--cols-1-s-2 grid--full-width grid--fix-full-height")
         div
             TextField(
                 v-model="form.editModel.value.name"
@@ -102,7 +102,7 @@ Dialog(
                 class="margin-top"
             )
         div(class="vertical-separator")
-        div
+        div(class="overflow--hidden")
             ProductVariantList(
                 v-if="form.origin.value"
                 :product="form.origin.value"

@@ -57,7 +57,7 @@ const form = useForm<ViewBooleanProperty, CreateBooleanProperty, PatchBooleanPro
     editId: props.editId,
 });
 
-const dialogTitle = computed<string>(() => (props.editId ? t('editBooleanProperty') : t('createBooleanProperty')));
+const dialogTitle = computed<string>(() => (props.editId ? t('editStringProperty') : t('createStringProperty')));
 </script>
 
 <template lang="pug">

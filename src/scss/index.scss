@@ -13,6 +13,8 @@
 @import "01_base/grid";
 @import "01_base/flex";
 @import "01_base/floating";
+@import "01_base/overflow";
+@import "01_base/sizing";
 
 @import "02_animations/transitions/fade";
 @import "02_animations/transitions/slideleft";
@@ -25,7 +27,9 @@
 @import "03_components/controls/checkbox";
 @import "03_components/controls/chip";
 @import "03_components/controls/pagination";
+@import "03_components/controls/picture-explorer";
 @import "03_components/controls/select";
+@import "03_components/controls/select-picture";
 @import "03_components/controls/text-field";
 
 @import "03_components/dialogs/dialog";

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import type { DataTableHeader } from '~/interfaces/dataTable';
 import type { SortingDirection } from '~/interfaces/ui';
 
@@ -10,7 +12,28 @@ const sortDirection = defineModel<SortingDirection>('sortDirection');
 const props = defineProps<{
     headers?: DataTableHeader[];
     hasActions?: boolean;
+    allowOverflow?: boolean;
 }>();
+
+const dataTableStyle = computed<string>(() => {
+    const cols = props.headers?.map((_h) => '1fr');
+    if (props.hasActions) cols?.push('auto');
+    return `grid-template-columns: ${cols?.join(' ')}`;
+});
+
+const classes = computed<string[]>(() => {
+    const tmp: string[] = [];
+    if (props.allowOverflow) tmp.push('data-table--allow-overflow');
+    return tmp;
+});
+
+const headerClasses = computed<string[][]>(() => props.headers?.map((header) => {
+    const tmp: string[] = [];
+    if (header.allowSorting) tmp.push('data-table__header--with-sorting');
+    if (header.align === 'center') tmp.push('data-table__header--align-center');
+    if (header.align === 'right') tmp.push('data-table__header--align-right');
+    return tmp;
+}) || []);
 
 function handleSorting(property?: string): void {
     if (!property) return;
@@ -23,36 +46,40 @@ function handleSorting(property?: string): void {
 </script>
 
 <template lang="pug">
-table(
+div(
     class="data-table"
+    :class="classes"
+    :style="dataTableStyle"
 )
-    tr(v-if="props.headers && props.headers.length")
-        th(
-            v-for="header in props.headers"
+    template(v-if="props.headers && props.headers.length")
+        div(
+            v-for="(header, i) in props.headers"
             :key="header.label"
             class="data-table__header"
-            :class="{ 'data-table__header--with-sorting': header.allowSorting }"
+            :class="headerClasses[i]"
             @click="handleSorting(header.property)"
         )
-            div
-                span(class="data-table__header-label") {{ header.label }}
-                span(
-                    v-if="header.allowSorting && header.property"
-                    class="data-table__header-sorting"
+            span(class="data-table__header-label") {{ header.label }}
+            span(
+                v-if="header.allowSorting && header.property"
+                class="data-table__header-sorting"
+            )
+                ChevronUpIcon(
+                    v-if="sortBy === header.property && sortDirection === 'asc'"
+                    class="data-table__header-sorting-icon data-table__header-sorting-icon--small"
                 )
-                    ChevronUpIcon(
-                        v-if="sortBy === header.property && sortDirection === 'asc'"
-                        class="data-table__header-sorting-icon data-table__header-sorting-icon--small"
-                    )
-                    ChevronDownIcon(
-                        v-else-if="sortBy === header.property && sortDirection === 'desc'"
-                        class="data-table__header-sorting-icon data-table__header-sorting-icon--small"
-                    )
-                    ChevronUpDownIcon(
-                        v-else
-                        class="data-table__header-sorting-icon"
-                    )
+                ChevronDownIcon(
+                    v-else-if="sortBy === header.property && sortDirection === 'desc'"
+                    class="data-table__header-sorting-icon data-table__header-sorting-icon--small"
+                )
+                ChevronUpDownIcon(
+                    v-else
+                    class="data-table__header-sorting-icon"
+                )
 
-        th(v-if="props.hasActions")
+        div(
+            v-if="props.hasActions"
+            class="data-table__header"
+        )
     slot
 </template>

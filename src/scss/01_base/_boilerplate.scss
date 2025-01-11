@@ -33,10 +33,10 @@ p a {
 }
 
 hr {
-    background: radial-gradient(var(--color-white), rgba(255, 255, 255, 0) 70%);
+    background: radial-gradient(var(--color-borders), rgba(255, 255, 255, 0) 70%);
     border: none;
-    height: 3px;
-    margin: var(--spacing);
+    height: 4px;
+    width: 100%;;
 }
 
 .fit-height-to-screen {

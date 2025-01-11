@@ -46,7 +46,7 @@ teleport(to="#dialogs")
                 :save-and-cancel="props.saveAndCancel"
                 :disable-saving="props.disableSaving"
                 :is-loading="props.isLoading"
-                :scroll-overflow="true"
+                :fix-full-height="props.fullSize"
                 @close="emit('close')"
                 @save="emit('save')"
             )

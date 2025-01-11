@@ -8,7 +8,7 @@ import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/i
 
 import { PencilIcon, PlusIcon } from '~/helpers/icons';
 
-import { getAvailableLanguages } from '~/helpers/misc';
+import { getContentLanguages } from '~/helpers/env';
 
 import { useAuthenticationStore } from '~/store/authentication';
 
@@ -51,7 +51,7 @@ const editable = useEditable(searchable.delayedLoad);
 
 const headers = computed<DataTableHeader[]>(() => [
     { label: t('name'), property: 'name', allowSorting: true },
-    { label: t('defaultPrice'), property: 'defaultPriceInCents', allowSorting: true },
+    { label: t('defaultPrice'), property: 'defaultPriceInCents', allowSorting: true, align: 'right' },
     { label: t('description') },
     { label: t('createdAt'), property: 'createdAt', allowSorting: true },
     { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
@@ -105,7 +105,7 @@ Page
                     DataTableColumn
                         div(class="flex flex--gap-f2")
                             Badge(
-                                v-for="language in getAvailableLanguages()"
+                                v-for="language in getContentLanguages()"
                                 :key="language"
                                 :type="product.descriptionLocalized[language] ? 'success' : 'error'"
                                 :title="product.descriptionLocalized[language] || t('missing')"

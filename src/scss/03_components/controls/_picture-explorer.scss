@@ -1,0 +1,65 @@
+.picture-explorer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing);
+    height: 100%;
+    overflow-y: auto;
+
+    &__picture-wrapper {
+        align-items: center;
+        aspect-ratio: 1 / 1;
+        background-color: var(--color-neutral-light);
+        border: 2px solid var(--color-borders);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0;
+        position: relative;
+        width: calc(var(--height-input) * 4);
+        transition: all var(--transition-duration);
+        
+        &:hover {
+            .picture-explorer__picture {
+                transform: scale(1.2);
+            }
+        }
+
+        &--selected {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px var(--color-primary);
+
+            .picture-explorer__checked {
+                opacity: 1;
+            }
+        }
+    }
+    &__picture {
+        background-repeat: no-repeat;
+        background-size: contain;
+        left: 0;
+        position: absolute;
+        height: 100%;
+        position: relative;
+        top: 0;
+        width: 100%;
+        transition: transform var(--transition-duration);
+    }
+    &__checked {
+        align-items: center;
+        background: var(--color-primary-transparent);
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        opacity: 0;
+        width: 100%;
+        transition: opacity var(--transition-duration);
+
+        & > * {
+            color: var(--color-on-background);
+            height: 50%;
+        }
+    }
+}

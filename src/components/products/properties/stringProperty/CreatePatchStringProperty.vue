@@ -97,6 +97,8 @@ Dialog(
         required
     )
 
+    hr
+
     p {{ t('allowedValues') }}
     div(
         v-if="form.editModel.value.allowedValues?.length"
@@ -109,7 +111,10 @@ Dialog(
             :removable="true"
             @clicked="removeAllowed(allowedValue)"
         )
-    div(v-else) {{ t('noRestrictions') }}
+    div(
+        v-else
+        class="text--small"
+    ) {{ t('noRestrictions') }}
 
     TextField(
         v-model="newAllowedValue"
