@@ -10,7 +10,7 @@ import Select from '~/components/controls/Select.vue';
 
 const emits = defineEmits(['update:model-value', 'update:value']);
 
-interface Props {
+const props = defineProps<{
     modelValue: string | null | undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     service: any;
@@ -19,8 +19,7 @@ interface Props {
     searchable?: boolean;
     orderBy?: string;
     placeholderOption?: SelectOption<string | null>;
-}
-const props = defineProps<Props>();
+}>();
 
 const isLoading = ref<boolean>(false);
 const records = ref<UuidViewModel[]>([]);

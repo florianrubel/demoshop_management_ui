@@ -80,9 +80,13 @@ const headers = computed<DataTableHeader[]>(() => [
     { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
 ]);
 
-const dataTableActions: DataTableAction[] = [
+const editHydratedProductVariant = computed<HydratedProductVariant | undefined>(() => editable.showEditFor.value
+    ? productVariantFactory.hydratedProductVariants.value.find(({ id }) => id === editable.showEditFor.value)
+    : undefined);
+
+const dataTableActions = computed<DataTableAction[]>(() => [
     { name: 'edit', icon: PencilIcon },
-];
+]);
 
 function handleDataTableAction(actionEvent: DataTableActionEvent) {
     if (actionEvent.name === 'edit') {
@@ -131,6 +135,7 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
                 v-model:sort-direction="sortDirection"
                 :headers
                 :has-actions="true"
+                :first-column-is-picture="true"
             )
                 DataTableRow(
                     v-for="productVariant in productVariantFactory.hydratedProductVariants.value"
@@ -155,11 +160,11 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
                         :key="property.id"
                     )
                         CheckIcon(
-                            v-if="productVariant.booleanProperties[property.name].value"
+                            v-if="productVariant.booleanProperties[property.name]?.value === true"
                             class="icon text--success"
                         )
                         XMarkIcon(
-                            v-else
+                            v-else-if="productVariant.booleanProperties[property.name]?.value === false"
                             class="icon text--error"
                         )
 
@@ -167,13 +172,13 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
                         v-for="property in productVariantFactory.numericProperties.value"
                         :key="property.id"
                         format="number"
-                        :value="productVariant.numericProperties[property.name].value"
+                        :value="productVariant.numericProperties[property.name]?.value"
                         align="right"
                     )
                     DataTableColumn(
                         v-for="property in productVariantFactory.stringProperties.value"
                         :key="property.id"
-                        :value="productVariant.stringProperties[property.name].value"
+                        :value="productVariant.stringProperties[property.name]?.value"
                     )
 
                     DataTableColumn(
@@ -186,11 +191,12 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
                     )
 
     CreatePatchProductVariant(
-        v-if="editable.showCreate.value || editable.showEditFor.value"
+        v-if="editable.showCreate.value || (editable.showEditFor.value && editHydratedProductVariant)"
         :edit-id="editable.showEditFor.value"
         :product="props.product"
-        @cancel="editable.hideCreateEdit()"
-        @saved="editable.hideCreateEdit(true)"
+        :hydrated-product-variant="editHydratedProductVariant"
+        @cancel="editable.hideCreateEdit(true)"
+        @refresh="searchable.load()"
     )
 
 </template>

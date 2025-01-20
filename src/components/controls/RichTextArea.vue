@@ -13,7 +13,7 @@ import { getUniqueId } from '~api/helpers/misc';
 
 const { locale } = useI18n();
 
-const emits = defineEmits(['update:model-value', 'focus', 'blur', 'enter']);
+const emits = defineEmits(['focus', 'blur', 'enter']);
 
 const cloud = useCKEditorCloud({
     version: '44.1.0',
@@ -44,7 +44,6 @@ const config = computed<EditorConfig | undefined>(() => {
 });
 
 interface Props {
-    modelValue?: string | number | null;
     maxLength?: number;
     label?: string;
     placeholder?: string;
@@ -55,7 +54,6 @@ interface Props {
     errors?: string[];
 }
 const props = withDefaults(defineProps<Props>(), {
-    modelValue: null,
     maxLength: DEFAULT_INPUT_MAX_LENGTH,
     label: undefined,
     placeholder: undefined,
@@ -66,12 +64,11 @@ const props = withDefaults(defineProps<Props>(), {
     errors: () => [],
 });
 
+const model = defineModel<string | null>();
+
 const id = ref<string>(getUniqueId());
 const isFocused = ref<boolean>(false);
 
-function emitInput(value: string): void {
-    emits('update:model-value', value);
-}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function emitFocus(event: EventInfo<string, unknown>, _editor: unknown): any {
     isFocused.value = true;
@@ -92,11 +89,11 @@ div(class="richtextarea")
         :config
         :maxlength="props.maxLength"
         :placeholder="props.placeholder"
-        :model-value="`${props.modelValue}` || ''"
+        :model-value="`${model}` || ''"
         :disabled="props.disabled"
         :readonly="props.readonly"
         :label="props.label"
-        @input="emitInput"
+        @input="model = $event"
         @focus="emitFocus"
         @blur="emitBlur"
     )

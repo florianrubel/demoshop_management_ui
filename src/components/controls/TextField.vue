@@ -9,10 +9,9 @@ import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 
 import { getUniqueId } from '~/helpers/misc';
 
-const emit = defineEmits(['update:model-value', 'focus', 'blur', 'enter', 'keyup.enter']);
+const emit = defineEmits(['focus', 'blur', 'enter', 'keyup.enter']);
 
 interface Props {
-    modelValue?: string | number | null;
     type?: string;
     maxLength?: number;
     min?: number;
@@ -27,7 +26,6 @@ interface Props {
     errors?: string[];
 }
 const props = withDefaults(defineProps<Props>(), {
-    modelValue: null,
     type: 'text',
     maxLength: DEFAULT_INPUT_MAX_LENGTH,
     min: undefined,
@@ -41,6 +39,8 @@ const props = withDefaults(defineProps<Props>(), {
     options: () => [],
     errors: () => [],
 });
+
+const model = defineModel<string | number | null | undefined>();
 
 const id = ref<string>(getUniqueId());
 const isFocused = ref<boolean>(false);
@@ -57,10 +57,10 @@ const classes = computed<string[]>(() => {
 
 function emitInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    emit('update:model-value', target.value);
+    model.value = props.type === 'number' ? Number.parseFloat(target.value) : target.value;
 }
 function emitInputWithValue(value: string | null): void {
-    emit('update:model-value', value);
+    model.value = value;
 }
 function emitFocus(event: Event) {
     isFocused.value = true;
@@ -120,7 +120,7 @@ div(
             :min="props.min"
             :max="props.max"
             :placeholder="props.placeholder"
-            :value="props.modelValue"
+            :value="model"
             :disabled="props.disabled"
             :readonly="props.readonly"
             :autocomplete="props.options.length > 0 ? 'off' : 'on'"

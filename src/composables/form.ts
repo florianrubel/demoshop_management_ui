@@ -51,8 +51,9 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
 
     const changedPatch = computed<PatchType>(() => getChangedPatch(editModel.value as PatchType));
     const toCreate = computed<CreateType>(() => changedPatch.value as unknown as CreateType);
-    const canSave = computed<boolean>(() => Object.keys(changedPatch.value).length > 0);
     const hasErrors = computed<boolean>(() => Object.keys(errors.value).length > 0);
+    const hasChanges = computed<boolean>(() => Object.keys(changedPatch.value).length > 0);
+    const canSave = computed<boolean>(() => hasChanges.value);
 
     function validateForm(): void {
         errors.value = {};
@@ -171,6 +172,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         changedPatch,
         canSave,
         hasErrors,
+        hasChanges,
         validateForm,
         mapToFormProperties,
         save,

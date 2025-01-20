@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import {
-    withDefaults,
-} from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { NavItemDefinition } from '~/interfaces/navigation';
@@ -17,10 +14,9 @@ const { t } = useI18n();
 
 const authenticationStore = useAuthenticationStore();
 
-interface Props {
+withDefaults(defineProps<{
     navItems: NavItemDefinition[];
-}
-withDefaults(defineProps<Props>(), {
+}>(), {
     navItems: () => [],
 });
 </script>

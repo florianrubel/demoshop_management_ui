@@ -10,10 +10,7 @@ import { DEFAULT_INPUT_MAX_LENGTH } from '~/constants/app';
 import TextField from '~/components/controls/TextField.vue';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '~/helpers/icons';
 
-const emits = defineEmits(['update:model-value']);
-
 interface Props {
-    modelValue: string | null | undefined;
     options: SelectOption<string | null | undefined>[],
     searchable?: boolean;
     stretch?: boolean;
@@ -36,6 +33,8 @@ const props = withDefaults(defineProps<Props>(), {
     errors: () => [],
 });
 
+const model = defineModel<string | null | undefined>();
+
 const expanded = ref<boolean>(false);
 const searchString = ref<string>('');
 
@@ -51,7 +50,7 @@ const optionsWithPlaceholderOption = computed<SelectOption<string | null | undef
     if (props.placeholderOption) return [props.placeholderOption, ...props.options];
     return props.options;
 });
-const selected = computed<SelectOption<string | null | undefined> | null>(() => optionsWithPlaceholderOption.value.find(({ value }) => value === props.modelValue) || null);
+const selected = computed<SelectOption<string | null | undefined> | null>(() => optionsWithPlaceholderOption.value.find(({ value }) => value === model.value) || null);
 const valueLabel = computed<string>(() => {
     if (selected.value) {
         return selected.value.label;
@@ -69,7 +68,7 @@ const classes = computed<string[]>(() => {
 });
 
 function emitInput(value: string | null | undefined): void {
-    emits('update:model-value', value);
+    model.value = value;
     expanded.value = false;
 }
 function toggleExpanded(): void {

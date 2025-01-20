@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
+
 import type { RouteLocationRaw } from 'vue-router';
 
 import ButtonContent from '~/components/controls/ButtonContent.vue';
 
 const slots = useSlots();
 
-interface Props {
+const props = defineProps<{
     type?: string;
     outline?: boolean;
     blank?: boolean;
@@ -20,18 +21,7 @@ interface Props {
     noWrap?: boolean;
     square?: boolean;
     onBackground?: boolean;
-}
-const props = withDefaults(defineProps<Props>(), {
-    type: undefined,
-    outline: false,
-    blank: false,
-    disabled: false,
-    loading: false,
-    to: undefined,
-    href: undefined,
-    active: undefined,
-    square: false,
-});
+}>();
 
 const classes = computed<string[]>(() => {
     const tmp = ['button'];

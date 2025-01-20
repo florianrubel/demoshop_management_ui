@@ -8,16 +8,17 @@ import Panel from '~/components/layout/Panel.vue';
 
 const emit = defineEmits(['close', 'save']);
 
-interface Props {
+const props = defineProps<{
     position?: string;
     large?: boolean;
     fullSize?: boolean;
     title?: string;
     saveAndCancel?: boolean;
     disableSaving?: boolean;
+    disableCancel?: boolean;
     isLoading?: boolean;
-}
-const props = defineProps<Props>();
+    hasChanges?: boolean;
+}>();
 
 const classes = computed<string[]>(() => {
     const tmp: string[] = [];
@@ -45,6 +46,8 @@ teleport(to="#dialogs")
                 :closable="true"
                 :save-and-cancel="props.saveAndCancel"
                 :disable-saving="props.disableSaving"
+                :disable-cancel="props.disableCancel"
+                :has-changes="props.hasChanges"
                 :is-loading="props.isLoading"
                 :fix-full-height="props.fullSize"
                 @close="emit('close')"

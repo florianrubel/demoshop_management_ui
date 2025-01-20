@@ -8,18 +8,19 @@ import Button from '~/components/controls/Button.vue';
 
 const { t } = useI18n();
 
-interface Props {
+const props = defineProps<{
     embedded?: boolean;
     closable?: boolean;
     title?: string;
     saveAndCancel?: boolean;
     disableSaving?: boolean;
+    disableCancel?: boolean;
+    hasChanges?: boolean;
     isLoading?: boolean;
     scrollOverflow?: boolean;
     fullHeight?: boolean;
     fixFullHeight?: boolean;
-}
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits(['close', 'save']);
 
@@ -57,17 +58,17 @@ div(
     )
         hr
         Button(
-            :disabled="props.disableSaving"
-            type="error"
+            :disabled="props.disableCancel"
+            :type="props.hasChanges === false ? 'primary' : 'error'"
             @click="emit('close')"
-        ) {{ t('cancel') }}
+        ) {{ props.hasChanges === false ? t('close') : t('cancel') }}
             template(#iconLeft)
                 XMarkIcon(class="icon")
         Button(
             :disabled="props.isLoading || props.disableSaving"
             :loading="props.isLoading"
             @click="emit('save')"
-        ) {{ t('save') }}
+        ) {{ props.hasChanges === false ? t('noChanges') : t('save') }}
             template(#iconLeft)
                 CheckIcon(class="icon")
 </template>

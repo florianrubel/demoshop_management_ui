@@ -13,10 +13,12 @@ const props = defineProps<{
     headers?: DataTableHeader[];
     hasActions?: boolean;
     allowOverflow?: boolean;
+    firstColumnIsPicture?: boolean;
 }>();
 
 const dataTableStyle = computed<string>(() => {
-    const cols = props.headers?.map((_h) => '1fr');
+    const cols = props.headers?.map((_h) => '1fr') || [];
+    if (props.firstColumnIsPicture && cols.length > 0) cols[0] = '75px';
     if (props.hasActions) cols?.push('auto');
     return `grid-template-columns: ${cols?.join(' ')}`;
 });

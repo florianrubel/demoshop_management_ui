@@ -1,18 +1,13 @@
 <script lang="ts" setup>
 import {
-    computed, withDefaults,
+    computed,
 } from 'vue';
 
-interface Props {
+const props = defineProps<{
     inverted?: boolean;
     size?: string;
     strokeWidth?: string;
-}
-const props = withDefaults(defineProps<Props>(), {
-    inverted: false,
-    size: undefined,
-    strokeWidth: undefined,
-});
+}>();
 
 const styles = computed<Record<string, string>>(() => {
     const stylesObj: Record<string, string> = {};

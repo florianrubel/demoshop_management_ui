@@ -57,5 +57,7 @@
     "editStringProperty": "Text Eigenschaft bearbeiten",
     "createStringProperty": "Text Eigenschaft erstellen",
     "editNumericProperty": "Numerische Eigenschaft bearbeiten",
-    "createNumericProperty": "Numerische Eigenschaft erstellen"
+    "createNumericProperty": "Numerische Eigenschaft erstellen",
+    "noChanges": "Keine Änderungen",
+    "close": "Schließen"
 }

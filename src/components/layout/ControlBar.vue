@@ -8,11 +8,11 @@ const { t } = useI18n();
 const props = defineProps<{
     title: string;
     showSearch?: boolean;
-    searchQuery?: string;
+    searchQuery?: string | number | null;
 }>();
 
 const emit = defineEmits<{
-    'update:search-query': [searchTerm: string | undefined],
+    'update:search-query': [searchTerm: string | number | null | undefined],
 }>();
 </script>
 

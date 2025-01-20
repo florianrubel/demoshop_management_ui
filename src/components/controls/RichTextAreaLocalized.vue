@@ -10,31 +10,28 @@ import RichTextArea from '~/components/controls/RichTextArea.vue';
 
 const { locale } = useI18n();
 
-const emit = defineEmits<{
-    'update:model-value': [modelValue: string],
-}>();
-
 const props = defineProps<{
-    modelValue: string | null | undefined;
     label?: string;
 }>();
+
+const model = defineModel<string | null>();
 
 const selectedLanguage = ref<string>(locale.value);
 const modelValueLocalized = ref<Record<string, string>>(getDefaultDescriptionLocalized());
 
-function handleUpdate(newValue: string) {
+function handleUpdate(newValue: string | null) {
     const newValueString = JSON.stringify({
         ...modelValueLocalized.value,
         [selectedLanguage.value]: newValue,
     });
-    if (newValueString !== props.modelValue) {
-        emit('update:model-value', newValueString);
+    if (newValueString !== model.value) {
+        model.value = newValueString;
     }
 }
 
-watch(() => props.modelValue, () => {
-    const newValue = props.modelValue ? JSON.parse(props.modelValue) : getDefaultDescriptionLocalized();
-    if (props.modelValue !== JSON.stringify(modelValueLocalized.value)) {
+watch(model, () => {
+    const newValue = model.value ? JSON.parse(model.value) : getDefaultDescriptionLocalized();
+    if (model.value !== JSON.stringify(modelValueLocalized.value)) {
         modelValueLocalized.value = newValue;
     }
 });

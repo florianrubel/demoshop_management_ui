@@ -41,14 +41,20 @@ div(
     :style="columnStyle"
 )
     template(v-if="props.format === 'datetime'")
-        DateTimeFormatter(:iso-string="stringValue")
+        DateTimeFormatter(
+            v-if="stringValue"
+            :iso-string="stringValue"
+        )
 
     template(v-else-if="props.format === 'price'")
-        PriceFormatter(:price="numberValue")
+        PriceFormatter(
+            v-if="numberValue"
+            :price="numberValue"
+        )
 
-    template(v-else-if="props.format === 'number'") {{ numberToLocaleString(undefined, numberValue) }}
+    template(v-else-if="props.format === 'number'") {{ numberValue !== undefined && numberValue !== null ? numberToLocaleString(undefined, numberValue) : '' }}
 
-    template(v-else-if="props.format === 'list'") {{ arrayValue.join(', ') }}
+    template(v-else-if="props.format === 'list'") {{ arrayValue !== undefined && arrayValue !== null ? arrayValue.join(', ') : '' }}
 
     template(v-else-if="props.format === 'picture'")
 

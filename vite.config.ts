@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
 // @ts-expect-error Because a wrong error message is appering
 import eslintPlugin from 'vite-plugin-eslint';
 
@@ -17,7 +16,6 @@ export default defineConfig({
         mkcert(),
         eslintPlugin(),
         tsconfigPaths(),
-        vueDevTools(),
     ],
     resolve: {
         alias: {

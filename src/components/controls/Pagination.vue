@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-    computed, withDefaults,
+    computed,
 } from 'vue';
 import {
     ChevronDoubleLeftIcon,
@@ -11,51 +11,51 @@ import {
 
 import type { PaginationItemDefinition } from '~/interfaces/pagination';
 
-const emits = defineEmits(['update:model-value']);
-
-interface Props {
-    modelValue: number;
+const props = defineProps<{
     pages: number;
-}
-const props = withDefaults(defineProps<Props>(), {});
+}>();
+
+const model = defineModel<number>();
+
+const safeModel = computed<number>(() => model.value || 0);
 
 const visiblePages = computed<PaginationItemDefinition[]>(() => {
     const items: PaginationItemDefinition[] = [];
 
-    if (props.pages > 2 && props.modelValue === props.pages) {
+    if (props.pages > 2 && safeModel.value === props.pages) {
         items.push({
-            value: props.modelValue - 2,
-            label: `${props.modelValue - 2}`,
+            value: safeModel.value - 2,
+            label: `${safeModel.value - 2}`,
         });
     }
 
-    if (props.pages > 1 && props.modelValue > 1) {
+    if (props.pages > 1 && safeModel.value > 1) {
         items.push({
-            value: props.modelValue - 1,
-            label: `${props.modelValue - 1}`,
+            value: safeModel.value - 1,
+            label: `${safeModel.value - 1}`,
         });
     }
 
     items.push({
-        value: props.modelValue,
-        label: `${props.modelValue}`,
+        value: safeModel.value,
+        label: `${safeModel.value}`,
     });
 
-    if (props.pages > 1 && props.modelValue < props.pages) {
+    if (props.pages > 1 && safeModel.value < props.pages) {
         items.push({
-            value: props.modelValue + 1,
-            label: `${props.modelValue + 1}`,
+            value: safeModel.value + 1,
+            label: `${safeModel.value + 1}`,
         });
     }
 
-    if (props.pages > 2 && props.modelValue === 1) {
+    if (props.pages > 2 && safeModel.value === 1) {
         items.push({
-            value: props.modelValue + 2,
-            label: `${props.modelValue + 2}`,
+            value: safeModel.value + 2,
+            label: `${safeModel.value + 2}`,
         });
     }
 
-    if (props.pages > 3 && props.modelValue < props.pages - 1) {
+    if (props.pages > 3 && safeModel.value < props.pages - 1) {
         items.push({
             value: 0,
             label: '...',
@@ -72,16 +72,12 @@ const visiblePages = computed<PaginationItemDefinition[]>(() => {
 
 const visiblePagesClasses = computed<string[][]>(() => visiblePages.value.map(({ value, noAction }) => {
     const classes = [];
-    if (props.modelValue === value) classes.push('pagination__page--current');
+    if (safeModel.value === value) classes.push('pagination__page--current');
     if (noAction) classes.push('pagination__page--no-action');
     return classes;
 }));
-const isFirstPage = computed<boolean>(() => props.modelValue === 1);
-const isLastPage = computed<boolean>(() => props.modelValue === props.pages);
-
-function emitInput(value: number): void {
-    emits('update:model-value', value);
-}
+const isFirstPage = computed<boolean>(() => model.value === 1);
+const isLastPage = computed<boolean>(() => model.value === props.pages);
 </script>
 
 <template lang="pug">
@@ -90,7 +86,7 @@ div(class="pagination")
         class="pagination__first"
         :disabled="isFirstPage"
         type="button"
-        @click="emitInput(1)"
+        @click="model = 1"
     )
         ChevronDoubleLeftIcon(class="icon")
 
@@ -98,7 +94,7 @@ div(class="pagination")
         class="pagination__prev"
         :disabled="isFirstPage"
         type="button"
-        @click="emitInput(modelValue - 1)"
+        @click="model = safeModel - 1"
     )
         ChevronLeftIcon(class="icon")
 
@@ -108,14 +104,14 @@ div(class="pagination")
         class="pagination__page"
         :class="visiblePagesClasses[index]"
         type="button"
-        @click="emitInput(page.value)"
+        @click="model = page.value"
     ) {{ page.label }}
 
     button(
         class="pagination__next"
         :disabled="isLastPage"
         type="button"
-        @click="emitInput(modelValue + 1)"
+        @click="model = safeModel + 1"
     )
         ChevronRightIcon(class="icon")
 
@@ -123,7 +119,7 @@ div(class="pagination")
         class="pagination__last"
         :disabled="isLastPage"
         type="button"
-        @click="emitInput(pages)"
+        @click="model = pages"
     )
         ChevronDoubleRightIcon(class="icon")
 </template>

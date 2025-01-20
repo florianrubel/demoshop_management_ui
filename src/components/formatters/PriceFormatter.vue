@@ -4,10 +4,9 @@ import {
 } from 'vue';
 import { numberToLocaleString } from '~/helpers/misc';
 
-interface Props {
+const props = withDefaults(defineProps<{
     price: number;
-}
-const props = withDefaults(defineProps<Props>(), {
+}>(), {
     price: 0,
 });
 

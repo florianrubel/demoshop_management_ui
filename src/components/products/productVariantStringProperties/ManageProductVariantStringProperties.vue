@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type {
@@ -11,15 +11,14 @@ import type {
 import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
 import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~/sharedLib/api/src/interfaces/pim/properties/stringProperty';
 import type { SelectOption } from '~/interfaces/ui';
-import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
+import type { HydratedProductVariant } from '~/composables/products/productVariantFactory';
 
-import { ArrowUturnLeftIcon, PlusIcon, XMarkIcon } from '~/helpers/icons';
+import { PlusIcon } from '~/helpers/icons';
 
 import { useAuthenticationStore } from '~/store/authentication';
+import useManageProductVariantRelations from '~/composables/products/manageProductVariantRelations';
 
 import ProductVariantStringPropertyService from '~/sharedLib/api/src/services/pim/productVariantStringPropertyService';
-
-import useSearchable from '~/composables/searchable';
 
 import StringPropertyService from '~/sharedLib/api/src/services/pim/properties/stringPropertyService';
 import Select from '~/components/controls/Select.vue';
@@ -45,35 +44,55 @@ const propertyService = new StringPropertyService(
 
 const props = defineProps<{
     productVariantId: string;
+    hydratedProductVariant?: HydratedProductVariant;
 }>();
 
 const toDelete = defineModel<string[]>('toDelete', { default: [] });
 const toCreate = defineModel<CreateProductVariantStringProperty[]>('toCreate', { default: [] });
-
-const newRelationHandle = ref<string | null>(null);
+const toPatch = defineModel<ViewProductVariantStringProperty[]>('toPatch', { default: [] });
 
 const additionalSearchParameters = computed<Record<string, string>>(() => ({
     productVariantIds: props.productVariantId,
 }));
 
-const propertiesMap = computed<Record<string, ViewStringProperty>>(() => {
-    const map: Record<string, ViewStringProperty> = {};
-    searchableProperties.records.value.forEach((record) => {
-        map[record.id] = record;
-    });
-    return map;
+const {
+    newRelationHandle,
+
+    propertiesMap,
+    availableProperties,
+    propertiesSelectOptions,
+    headers,
+    existingAndNew,
+    dataTableActions,
+
+    searchableProperties,
+
+    handleDataTableAction,
+    addNewRelation,
+    save,
+// This is ok at this location, because the value won't change.
+// eslint-disable-next-line vue/no-setup-props-destructure
+} = useManageProductVariantRelations<
+    string,
+    ViewProductVariantStringProperty,
+    CreateProductVariantStringProperty,
+    PatchProductVariantStringProperty,
+    ProductVariantStringPropertySearchParameters,
+    ViewStringProperty,
+    CreateStringProperty,
+    PatchStringProperty,
+    SearchParameters
+>({
+    relationService,
+    propertyService,
+    additionalSearchParameters,
+    props,
+    newRelationValueFunction: (property: ViewStringProperty) => property.allowedValues ? property.allowedValues[0] || '' : '',
+    toDelete,
+    toCreate,
+    toPatch,
+    hydratedProductVariantRelations: props.hydratedProductVariant?.stringProperties,
 });
-
-const availableProperties = computed<ViewStringProperty[]>(() => searchableProperties.records.value
-    .filter(({ id }) => !searchable.records.value.some(({ propertyId }) => propertyId === id)));
-
-const propertiesSelectOptions = computed<SelectOption<string>[]>(() => [
-    { value: null, label: t('pleaseChoose') },
-    ...availableProperties.value.map(({ id, name }) => ({
-        value: id,
-        label: name,
-    })),
-]);
 
 const allowedValuesSelectOptionsMap = computed<Record<string, SelectOption<string>[]>>(() => {
     const map: Record<string, SelectOption<string>[]> = {};
@@ -83,84 +102,9 @@ const allowedValuesSelectOptionsMap = computed<Record<string, SelectOption<strin
     return map;
 });
 
-const headers = computed<DataTableHeader[]>(() => [
-    { label: t('name') },
-    { label: t('value') },
-]);
-
-const existingAndNew = computed<(ViewProductVariantStringProperty | CreateProductVariantStringProperty)[]>(() => [
-    ...searchable.records.value,
-    ...toCreate.value,
-]);
-
-const searchable = useSearchable<
-    ViewProductVariantStringProperty,
-    CreateProductVariantStringProperty,
-    PatchProductVariantStringProperty,
-    ProductVariantStringPropertySearchParameters
->({
-    service: relationService,
-    initialPageSize: -1,
-    additionalSearchParameters,
+defineExpose({
+    save,
 });
-
-const searchableProperties = useSearchable<
-    ViewStringProperty,
-    CreateStringProperty,
-    PatchStringProperty,
-    SearchParameters
->({
-    service: propertyService,
-    initialPageSize: -1,
-});
-
-const dataTableActions: DataTableAction[] = [
-    {
-        name: 'restore',
-        icon: ArrowUturnLeftIcon,
-        label: t('restore'),
-        conditionalFunction: (value?: string | null) => !!value && toDelete.value.includes(value),
-    },
-    {
-        name: 'delete',
-        icon: XMarkIcon,
-        label: t('delete'),
-        conditionalFunction: (value?: string | null) => !!value && !toDelete.value.includes(value),
-    },
-];
-
-function handleDataTableAction(actionEvent: DataTableActionEvent) {
-    if (!actionEvent.value) return;
-    switch(actionEvent.name) {
-    case 'delete':
-        toDelete.value = [
-            ...toDelete.value,
-            actionEvent.value,
-        ];
-        break;
-    case 'restore':
-        toDelete.value = toDelete.value.filter((fValue) => fValue !== actionEvent.value);
-        break;
-    }
-}
-
-function addNewRelation(): void {
-    if (!newRelationHandle.value) return;
-    const allowedValues = propertiesMap.value[newRelationHandle.value].allowedValues || [];
-    const [firstAllowedValue] = allowedValues;
-    toCreate.value = [
-        ...toCreate.value,
-        {
-            productVariantId: props.productVariantId,
-            propertyId: newRelationHandle.value,
-            value: firstAllowedValue || '',
-        },
-    ];
-    newRelationHandle.value = null;
-}
-
-void searchable.load();
-void searchableProperties.load();
 </script>
 
 <template lang="pug">
@@ -182,7 +126,7 @@ div(class="flex flex--column flex--gap-f2")
             DataTableColumn(:value="propertiesMap[relation.propertyId] ? propertiesMap[relation.propertyId].name : ''")
             DataTableColumn
                 Select(
-                    v-if="allowedValuesSelectOptionsMap[relation.propertyId].length"
+                    v-if="allowedValuesSelectOptionsMap[relation.propertyId] && allowedValuesSelectOptionsMap[relation.propertyId].length"
                     v-model="relation.value"
                     :options="allowedValuesSelectOptionsMap[relation.propertyId]"
                 )

@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-import { withDefaults, useSlots } from 'vue';
+import { useSlots } from 'vue';
 import LoadingIndicatorCircle from '~/components/loading/LoadingIndicatorCircle.vue';
 
 const slots = useSlots();
 
-interface Props {
+const props = defineProps<{
     loading?: boolean;
-}
-const props = withDefaults(defineProps<Props>(), {
-    loading: false,
-});
+}>();
 
 </script>
 <template lang="pug">

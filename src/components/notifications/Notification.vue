@@ -14,13 +14,12 @@ import {
 
 const notificationStore = useNotificationStore();
 
-interface Props {
+const props = defineProps<{
     type?: string;
     duration?: number;
     notification?: Notification;
     onSurface?: boolean;
-}
-const props = defineProps<Props>();
+}>();
 
 const classes = computed<string[]>(() => {
     const tmp = [];

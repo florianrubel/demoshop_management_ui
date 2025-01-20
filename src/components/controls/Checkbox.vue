@@ -5,11 +5,10 @@ import {
 
 import { CheckIcon } from '~/helpers/icons';
 
-interface Props {
+const props = defineProps<{
     label?: string;
     disabled?: boolean;
-}
-const props = defineProps<Props>();
+}>();
 
 const model = defineModel<boolean>({ default: false });
 
