@@ -18,9 +18,9 @@ type View = 'boolean' | 'numeric' | 'string';
 const currentView = ref<View>('boolean');
 
 const tabs = computed<TabItem<View>[]>(() => [
-    { value: 'boolean', label: t('booleanProperties')},
-    { value: 'numeric', label: t('numericProperties')},
-    { value: 'string', label: t('stringProperties')},
+    { value: 'boolean', label: t('booleanProperties') },
+    { value: 'numeric', label: t('numericProperties') },
+    { value: 'string', label: t('stringProperties') },
 ]);
 
 </script>

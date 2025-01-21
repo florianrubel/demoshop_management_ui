@@ -2,12 +2,16 @@
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateProductVariant, PatchProductVariant, ProductVariantPaginationParameters, ViewProductVariant } from '~api/interfaces/pim/productVariant';
+import type {
+    CreateProductVariant, PatchProductVariant, ProductVariantPaginationParameters, ViewProductVariant,
+} from '~api/interfaces/pim/productVariant';
 import type { ViewProduct } from '~/sharedLib/api/src/interfaces/pim/product';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
 import type { SortingDirection } from '~/interfaces/ui';
 
-import { CheckIcon, InformationCircleIcon, PencilIcon, XMarkIcon } from '~/helpers/icons';
+import {
+    CheckIcon, InformationCircleIcon, PencilIcon, XMarkIcon,
+} from '~/helpers/icons';
 import { getCdnBaseUrl } from '~/helpers/env';
 
 import { useAuthenticationStore } from '~/store/authentication';
@@ -40,11 +44,11 @@ const productvariantService = new ProductVariantService(
 );
 
 const props = defineProps<{
-    product: ViewProduct;
+    product: ViewProduct | null;
 }>();
 
 const additionalSearchParameters = computed<Record<string, unknown>>(() => ({
-    productIds: props.product.id,
+    productIds: props.product?.id,
 }));
 
 const searchable = useSearchable<
@@ -72,17 +76,21 @@ async function triggerHydration() {
 
 const headers = computed<DataTableHeader[]>(() => [
     { label: t('picture') },
-    { label: t('price'), property: 'priceInCents', allowSorting: true, align: 'right' },
+    {
+        label: t('price'), property: 'priceInCents', allowSorting: true, align: 'right',
+    },
     ...productVariantFactory.booleanProperties.value.map(({ name }) => ({ label: name, property: `booleanProperties.${name}`, allowSorting: true })),
-    ...productVariantFactory.numericProperties.value.map(({ name }) => ({ label: name, property: `numericProperties.${name}`, allowSorting: true, align: 'right' })),
+    ...productVariantFactory.numericProperties.value.map(({ name }) => ({
+        label: name, property: `numericProperties.${name}`, allowSorting: true, align: 'right',
+    })),
     ...productVariantFactory.stringProperties.value.map(({ name }) => ({ label: name, property: `stringProperties.${name}`, allowSorting: true })),
     { label: t('createdAt'), property: 'createdAt', allowSorting: true },
     { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
 ]);
 
-const editHydratedProductVariant = computed<HydratedProductVariant | undefined>(() => editable.showEditFor.value
+const editHydratedProductVariant = computed<HydratedProductVariant | undefined>(() => (editable.showEditFor.value
     ? productVariantFactory.hydratedProductVariants.value.find(({ id }) => id === editable.showEditFor.value)
-    : undefined);
+    : undefined));
 
 const dataTableActions = computed<DataTableAction[]>(() => [
     { name: 'edit', icon: PencilIcon },
@@ -105,30 +113,42 @@ watch(() => [
             copy = copy.sort((a, b) => {
                 const fixedA = a[parent as keyof HydratedProductVariant] as Record<string, HydratedBooleanProperty | HydratedNumericProperty | HydratedStringProperty>;
                 const fixedB = b[parent as keyof HydratedProductVariant] as Record<string, HydratedBooleanProperty | HydratedNumericProperty | HydratedStringProperty>;
-                return sortDirection.value === 'asc' ? fixedA[child].value > fixedB[child].value ? 1 : -1 : fixedA[child].value > fixedB[child].value ? -1 : 1;
+                if (sortDirection.value === 'asc') return fixedA[child].value > fixedB[child].value ? 1 : -1;
+                return fixedA[child].value > fixedB[child].value ? -1 : 1;
             });
         }
     } else {
         copy = copy.sort((a, b) => {
             const fixedA = a[sortBy.value as keyof HydratedProductVariant] as never;
             const fixedB = b[sortBy.value as keyof HydratedProductVariant] as never;
-            return sortDirection.value === 'asc' ? fixedA > fixedB ? 1 : -1 : fixedA > fixedB ? -1 : 1;
+            if (sortDirection.value === 'asc') return fixedA > fixedB ? 1 : -1;
+            return fixedA > fixedB ? -1 : 1;
         });
     }
     productVariantFactory.hydratedProductVariants.value = copy;
 });
 
-void searchable.load();
+watch(() => props.product, () => {
+    searchable.load();
+});
+
+if (props.product) searchable.load();
 </script>
 
 <template lang="pug">
 div(class="flex flex--column flex--gap flex--fix-full-height")
     div
         h2 {{ t('productVariants') }}
-        div(class="flex flex--gap-f2 text--neutral")
+        div(
+            v-if="props.product"
+            class="flex flex--gap-f2 text--neutral"
+        )
             InformationCircleIcon(class="icon")
             span {{ t('horizontalScrollHint') }}
-    div(class="overflow--hidden flex flex--full-height")
+    div(
+        v-if="props.product"
+        class="overflow--hidden flex flex--full-height"
+    )
         LoadingWrapper(:is-loading="searchable.isLoading.value")
             DataTable(
                 v-model:sort-by="sortBy"
@@ -182,16 +202,16 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
                     )
 
                     DataTableColumn(
-                        :value="product.createdAt"
+                        :value="props.product.createdAt"
                         format="datetime"
                     )
                     DataTableColumn(
-                        :value="product.updatedAt"
+                        :value="props.product.updatedAt"
                         format="datetime"
                     )
 
     CreatePatchProductVariant(
-        v-if="editable.showCreate.value || (editable.showEditFor.value && editHydratedProductVariant)"
+        v-if="props.product && (editable.showCreate.value || (editable.showEditFor.value && editHydratedProductVariant))"
         :edit-id="editable.showEditFor.value"
         :product="props.product"
         :hydrated-product-variant="editHydratedProductVariant"

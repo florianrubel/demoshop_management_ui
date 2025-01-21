@@ -123,7 +123,7 @@ export default [
             ...vueTemplateRules,
 
             // `vue/max-len` needs special configuration for better usability
-            'vue/max-len': ['error', 100, 2, {
+            'vue/max-len': ['error', 200, 2, {
                 ignoreUrls: true,
                 ignoreComments: false,
                 ignoreRegExpLiterals: true,
@@ -226,42 +226,6 @@ export default [
 
             // https://eslint.vuejs.org/rules/no-multi-spaces.html
             'vue/no-multi-spaces': 'error',
-
-
-
-            // NX-Rules
-            'vue/max-attributes-per-line': 'off',
-            'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-            'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-            'no-underscore-dangle': 'off',
-            'vue/no-v-html': 'error',
-            indent: ['error', 4],
-            'max-len': ['warn', 200],
-            'vue/max-len': ['warn', 200],
-            'vue/html-indent': ['error', 4, {
-                baseIndent: 0,
-            }],
-            'vue/multi-word-component-names': 'off',
-            'import/extensions': [
-                'error',
-                'ignorePackages',
-                {
-                    js: 'never',
-                    jsx: 'never',
-                    ts: 'never',
-                    tsx: 'never',
-                },
-            ],
-            'no-unused-vars': 'off',
-            '@typescript-eslint/no-unused-vars': [
-                'error', // or "error"
-                {
-                    argsIgnorePattern: '^_',
-                    varsIgnorePattern: '^_',
-                    caughtErrorsIgnorePattern: '^_',
-                },
-            ],
-            '@typescript-eslint/no-explicit-any': 'warn',
         },
         settings: {
             'import/resolver': {
@@ -271,6 +235,7 @@ export default [
                 alias: {
                     map: [
                         ['~', './src'],
+                        ['~api', './src/sharedLib/api/src'],
                     ],
                     extensions: ['.ts', '.js', '.tsx', '.json', '.vue'],
                 },
@@ -285,7 +250,44 @@ export default [
 
     {
         rules: {
+            // Custom Rules
+            'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+            'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+            'no-underscore-dangle': 'off',
+            'no-unused-vars': 'off',
+            'import/extensions': [
+                'error',
+                'ignorePackages',
+                {
+                    js: 'never',
+                    jsx: 'never',
+                    ts: 'never',
+                    tsx: 'never',
+                },
+            ],
+
             '@typescript-eslint/no-floating-promises': 'off',
+            '@typescript-eslint/no-unused-vars': [
+                'error', // or "error"
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    caughtErrorsIgnorePattern: '^_',
+                },
+            ],
+            '@typescript-eslint/no-explicit-any': 'warn',
+
+            'vue/no-v-html': 'error',
+            indent: ['error', 4],
+            'vue/html-indent': ['error', 4, {
+                baseIndent: 0,
+            }],
+            'vue/multi-word-component-names': 'off',
+            'vue/no-setup-props-destructure': 'error',
+            'vue/max-attributes-per-line': ['error', {
+                multiline: { max: 1 },
+                singleline: { max: 1 },
+            }],
         }
     },
 
@@ -299,9 +301,10 @@ export default [
     },
 
     {
+        files: ['src/**/*.vue'],
         rules: {
-            // TODO: Try to remove all any
-            '@typescript-eslint/no-explicit-any': 'warn',
+            // This works fine in vue components.
+            'no-use-before-define': 'off',
         }
     },
 

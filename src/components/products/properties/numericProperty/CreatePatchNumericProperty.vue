@@ -48,7 +48,7 @@ const getDefaultFormProperties = (): (PatchNumericProperty | CreateNumericProper
 
 const validation = useValidation();
 // This is fine here, because the component will be recreated.
-// eslint-disable-next-line vue/no-setup-props-destructure
+
 const form = useForm<ViewNumericProperty, CreateNumericProperty, PatchNumericProperty, SearchParameters>({
     emit,
     service: numericPropertyService,
@@ -66,7 +66,9 @@ const dialogTitle = computed<string>(() => (props.editId ? t('editNumericPropert
 Dialog(
     :title="dialogTitle"
     :save-and-cancel="true"
-    :disable-saving="form.isSaving.value || form.isLoading.value"
+    :disable-saving="form.isSaving.value || form.isLoading.value || !form.hasChanges.value"
+    :disable-cancel="form.isSaving.value || form.isLoading.value"
+    :has-changes="form.hasChanges.value"
     :is-loading="form.isSaving.value"
     @save="form.save()"
     @close="emit('cancel')"

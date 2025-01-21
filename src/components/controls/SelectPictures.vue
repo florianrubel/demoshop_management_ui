@@ -44,6 +44,7 @@ div(
 
         button(
             class="select-picture__select"
+            type="button"
             @click="showPictureExplorer = true"
         )
             span(

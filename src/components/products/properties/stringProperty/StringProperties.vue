@@ -56,7 +56,7 @@ function handleDataTableAction(actionEvent: DataTableActionEvent) {
     }
 }
 
-void searchable.load();
+searchable.load();
 </script>
 
 <template lang="pug">
@@ -100,7 +100,6 @@ DataTable(
             :value="stringProperty.updatedAt"
             format="datetime"
         )
-
 
 CreatePatchStringProperty(
     v-if="editable.showCreate.value || editable.showEditFor.value"

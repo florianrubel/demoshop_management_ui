@@ -10,7 +10,7 @@ import type {
 } from '~/sharedLib/api/src/interfaces/pim/productVariantBooleanProperty';
 import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
 import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~/sharedLib/api/src/interfaces/pim/properties/booleanProperty';
-import type { HydratedProductVariant } from '~/composables/products/productVariantFactory';
+import type { HydratedBooleanProperty, HydratedProductVariant } from '~/composables/products/productVariantFactory';
 
 import { PlusIcon } from '~/helpers/icons';
 
@@ -55,6 +55,8 @@ const additionalSearchParameters = computed<Record<string, string>>(() => ({
     productVariantIds: props.productVariantId,
 }));
 
+const hydratedProductVariantRelations = computed<Record<string, HydratedBooleanProperty>>(() => (props.hydratedProductVariant?.booleanProperties || {}));
+
 const {
     newRelationHandle,
 
@@ -64,12 +66,12 @@ const {
     headers,
     existingAndNew,
     dataTableActions,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changedRelations,
 
     handleDataTableAction,
     addNewRelation,
     save,
-// This is ok at this location, because the value won't change.
-// eslint-disable-next-line vue/no-setup-props-destructure
 } = useManageProductVariantRelations<
     boolean,
     ViewProductVariantBooleanProperty,
@@ -89,7 +91,7 @@ const {
     toDelete,
     toCreate,
     toPatch,
-    hydratedProductVariantRelations: props.hydratedProductVariant?.booleanProperties,
+    hydratedProductVariantRelations,
 });
 defineExpose({
     save,

@@ -28,7 +28,7 @@ const classes = computed<string[]>(() => {
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-	        viewBox="0 0 295.526 295.526"
+            viewBox="0 0 295.526 295.526"
             xml:space="preserve"
         )
             g

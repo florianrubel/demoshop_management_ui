@@ -11,7 +11,7 @@ import type {
 import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
 import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~/sharedLib/api/src/interfaces/pim/properties/stringProperty';
 import type { SelectOption } from '~/interfaces/ui';
-import type { HydratedProductVariant } from '~/composables/products/productVariantFactory';
+import type { HydratedProductVariant, HydratedStringProperty } from '~/composables/products/productVariantFactory';
 
 import { PlusIcon } from '~/helpers/icons';
 
@@ -55,6 +55,8 @@ const additionalSearchParameters = computed<Record<string, string>>(() => ({
     productVariantIds: props.productVariantId,
 }));
 
+const hydratedProductVariantRelations = computed<Record<string, HydratedStringProperty>>(() => (props.hydratedProductVariant?.stringProperties || {}));
+
 const {
     newRelationHandle,
 
@@ -70,8 +72,6 @@ const {
     handleDataTableAction,
     addNewRelation,
     save,
-// This is ok at this location, because the value won't change.
-// eslint-disable-next-line vue/no-setup-props-destructure
 } = useManageProductVariantRelations<
     string,
     ViewProductVariantStringProperty,
@@ -87,11 +87,11 @@ const {
     propertyService,
     additionalSearchParameters,
     props,
-    newRelationValueFunction: (property: ViewStringProperty) => property.allowedValues ? property.allowedValues[0] || '' : '',
+    newRelationValueFunction: (property: ViewStringProperty) => (property.allowedValues ? property.allowedValues[0] || '' : ''),
     toDelete,
     toCreate,
     toPatch,
-    hydratedProductVariantRelations: props.hydratedProductVariant?.stringProperties,
+    hydratedProductVariantRelations,
 });
 
 const allowedValuesSelectOptionsMap = computed<Record<string, SelectOption<string>[]>>(() => {

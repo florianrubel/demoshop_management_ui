@@ -10,7 +10,7 @@ import type {
 } from '~/sharedLib/api/src/interfaces/pim/productVariantNumericProperty';
 import type { SearchParameters } from '~/sharedLib/api/src/interfaces/api';
 import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~/sharedLib/api/src/interfaces/pim/properties/numericProperty';
-import type { HydratedProductVariant } from '~/composables/products/productVariantFactory';
+import type { HydratedNumericProperty, HydratedProductVariant } from '~/composables/products/productVariantFactory';
 
 import { PlusIcon } from '~/helpers/icons';
 
@@ -55,6 +55,8 @@ const additionalSearchParameters = computed<Record<string, string>>(() => ({
     productVariantIds: props.productVariantId,
 }));
 
+const hydratedProductVariantRelations = computed<Record<string, HydratedNumericProperty>>(() => (props.hydratedProductVariant?.numericProperties || {}));
+
 const {
     newRelationHandle,
 
@@ -68,8 +70,6 @@ const {
     handleDataTableAction,
     addNewRelation,
     save,
-// This is ok at this location, because the value won't change.
-// eslint-disable-next-line vue/no-setup-props-destructure
 } = useManageProductVariantRelations<
     number,
     ViewProductVariantNumericProperty,
@@ -89,7 +89,7 @@ const {
     toDelete,
     toCreate,
     toPatch,
-    hydratedProductVariantRelations: props.hydratedProductVariant?.numericProperties,
+    hydratedProductVariantRelations,
 });
 defineExpose({
     save,

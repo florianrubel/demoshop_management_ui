@@ -41,7 +41,7 @@ const filesService = new FilesService(
 
 function created(): void {
     selectedFiles.value = props.preSelectedFiles || [];
-    void getFiles();
+    getFiles();
 }
 
 async function getFiles(): Promise<void> {
@@ -94,6 +94,7 @@ Dialog(
             button(
                 v-for="file in files"
                 :key="file"
+                type="button"
                 class="picture-explorer__picture-wrapper"
                 :class="{ 'picture-explorer__picture-wrapper--selected': selectedFiles.includes(file) }"
                 @click="selectFile(file)"

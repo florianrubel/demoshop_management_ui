@@ -1,4 +1,6 @@
-import { computed, ref, watch, type ComputedRef, type ModelRef } from 'vue';
+import {
+    computed, ref, watch, type ComputedRef, type ModelRef,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
@@ -52,11 +54,32 @@ export default function useManageProductVariantRelations<
     toDelete: ModelRef<string[]>;
     toCreate: ModelRef<RelationCreateType[]>;
     toPatch: ModelRef<RelationViewType[]>;
-    hydratedProductVariantRelations?: Record<string, HydratedProperty<ValueType>>;
+    hydratedProductVariantRelations?: ComputedRef<Record<string, HydratedProperty<ValueType>>>;
 }) {
     const { t } = useI18n();
 
     const notificationStore = useNotificationStore();
+
+    const searchableRelations = useSearchable<
+        RelationViewType,
+        RelationCreateType,
+        RelationPatchType,
+        RelationSearchParametersType
+    >({
+        service: relationService,
+        initialPageSize: -1,
+        additionalSearchParameters,
+    });
+
+    const searchableProperties = useSearchable<
+        PropertyViewType,
+        PropertyCreateType,
+        PropertyPatchType,
+        PropertySearchParametersType
+    >({
+        service: propertyService,
+        initialPageSize: -1,
+    });
 
     const newRelationHandle = ref<string | null>(null);
     const isSaving = {
@@ -94,27 +117,6 @@ export default function useManageProductVariantRelations<
         ...toCreate.value,
     ]);
 
-    const searchableRelations = useSearchable<
-        RelationViewType,
-        RelationCreateType,
-        RelationPatchType,
-        RelationSearchParametersType
-    >({
-        service: relationService,
-        initialPageSize: -1,
-        additionalSearchParameters,
-    });
-
-    const searchableProperties = useSearchable<
-        PropertyViewType,
-        PropertyCreateType,
-        PropertyPatchType,
-        PropertySearchParametersType
-    >({
-        service: propertyService,
-        initialPageSize: -1,
-    });
-
     const dataTableActions = computed<DataTableAction[]>(() => [
         {
             name: 'restore',
@@ -137,7 +139,7 @@ export default function useManageProductVariantRelations<
             const property = propertiesMap.value[relation.propertyId];
             if (!property) return false;
 
-            const hydratedRelation = hydratedProductVariantRelations[property.name];
+            const hydratedRelation = hydratedProductVariantRelations.value[property.name];
             if (!hydratedRelation) return false;
 
             return relation.value !== hydratedRelation.value;
@@ -148,21 +150,30 @@ export default function useManageProductVariantRelations<
 
     function handleDataTableAction(actionEvent: DataTableActionEvent) {
         if (!actionEvent.value) return;
-        switch(actionEvent.name) {
+        switch (actionEvent.name) {
         case 'delete':
-            const created = toCreate.value.find(({ propertyId }) => propertyId === actionEvent.value);
-            if (created) {
+            if (toCreate.value.find(({ propertyId }) => propertyId === actionEvent.value)) {
+                // This is fine, because it's a ref.
+                // eslint-disable-next-line no-param-reassign
                 toCreate.value = toCreate.value.filter(({ propertyId }) => propertyId !== actionEvent.value);
                 return;
             }
+            // This is fine, because it's a ref.
+            // eslint-disable-next-line no-param-reassign
             toDelete.value = [
                 ...toDelete.value,
                 actionEvent.value,
             ];
             break;
+
         case 'restore':
+            // This is fine, because it's a ref.
+            // eslint-disable-next-line no-param-reassign
             toDelete.value = toDelete.value.filter((fValue) => fValue !== actionEvent.value);
             break;
+
+        default:
+            // no default case
         }
     }
 
@@ -178,6 +189,8 @@ export default function useManageProductVariantRelations<
             value: newRelationValueFunction(property),
         };
 
+        // This is fine, because it's a ref.
+        // eslint-disable-next-line no-param-reassign
         toCreate.value = [
             ...(toCreate.value || []),
             newRelation,
@@ -235,20 +248,30 @@ export default function useManageProductVariantRelations<
         isSaving.toDelete.value = false;
     }
 
-    function save(): void {
-        // eslint-disable-next-line no-console
-        console.log('saveRelations');
-        void saveDeleted();
-        void savePatched();
-        void saveCreated();
+    async function save(): Promise<void> {
+        await Promise.all([
+            saveDeleted(),
+            savePatched(),
+            saveCreated(),
+        ]);
+        await searchableRelations.load();
+        // This is fine, because it's a ref.
+        // eslint-disable-next-line no-param-reassign
+        toPatch.value = changedRelations.value;
+        // eslint-disable-next-line no-param-reassign
+        toCreate.value = [];
+        // eslint-disable-next-line no-param-reassign
+        toDelete.value = [];
     }
 
     watch(changedRelations, () => {
+        // This is fine, because it's a ref.
+        // eslint-disable-next-line no-param-reassign
         toPatch.value = changedRelations.value;
     });
 
-    void searchableRelations.load();
-    void searchableProperties.load();
+    searchableRelations.load();
+    searchableProperties.load();
 
     return {
         newRelationHandle,
@@ -268,4 +291,4 @@ export default function useManageProductVariantRelations<
         addNewRelation,
         save,
     };
-};
+}

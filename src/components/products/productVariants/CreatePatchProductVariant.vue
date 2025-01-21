@@ -2,6 +2,7 @@
 import {
     computed,
     ref,
+    watch,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -59,15 +60,6 @@ const getDefaultFormProperties = (): (PatchProductVariant | CreateProductVariant
     priceInCents: props.product.defaultPriceInCents,
 });
 
-// This is fine here, because the component will be recreated.
-// eslint-disable-next-line vue/no-setup-props-destructure
-const form = useForm<ViewProductVariant, CreateProductVariant, PatchProductVariant, SearchParameters>({
-    emit,
-    service: productvariantService,
-    getDefaultFormProperties,
-    editId: props.editId,
-});
-
 const toDelete = {
     booleanProperties: ref<string[]>([]),
     numericProperties: ref<string[]>([]),
@@ -89,6 +81,7 @@ const manageBooleanProperties = ref();
 const manageNumericProperties = ref();
 const manageStringProperties = ref();
 
+const editId = computed(() => props.editId);
 const dialogTitle = computed<string>(() => (props.editId ? t('editProductVariant') : t('createProductVariant')));
 const hasChanges = computed<boolean>(() => form.hasChanges.value
     || toDelete.booleanProperties.value.length > 0
@@ -101,15 +94,24 @@ const hasChanges = computed<boolean>(() => form.hasChanges.value
     || toPatch.numericProperties.value.length > 0
     || toPatch.stringProperties.value.length > 0);
 
+const form = useForm<ViewProductVariant, CreateProductVariant, PatchProductVariant, SearchParameters>({
+    emit,
+    service: productvariantService,
+    getDefaultFormProperties,
+    editId: editId.value,
+});
+
 async function save(): Promise<void> {
-    // eslint-disable-next-line no-console
-    console.log('test');
     await form.save();
     manageBooleanProperties.value.save();
     manageNumericProperties.value.save();
     manageStringProperties.value.save();
     emit('refresh');
 }
+
+watch(() => props.hydratedProductVariant, () => {
+    console.log(props.hydratedProductVariant);
+});
 </script>
 
 <template lang="pug">
@@ -182,6 +184,5 @@ Dialog(
                         v-model="form.editModel.value.pictures"
                         :label="t('pictures')"
                     )
-
 
 </template>

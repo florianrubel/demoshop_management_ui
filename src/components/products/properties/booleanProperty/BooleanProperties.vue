@@ -50,14 +50,13 @@ const dataTableActions: DataTableAction[] = [
     { name: 'edit', icon: PencilIcon },
 ];
 
-
 function handleDataTableAction(actionEvent: DataTableActionEvent) {
     if (actionEvent.name === 'edit') {
         editable.showEditFor.value = actionEvent.value;
     }
 }
 
-void searchable.load();
+searchable.load();
 </script>
 
 <template lang="pug">
@@ -97,7 +96,6 @@ LoadingWrapper(:is-loading="searchable.isLoading.value")
                 :value="booleanProperty.updatedAt"
                 format="datetime"
             )
-
 
 CreatePatchBooleanProperty(
     v-if="editable.showCreate.value || editable.showEditFor.value"

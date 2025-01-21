@@ -52,8 +52,10 @@ const getDefaultFormProperties = (): (PatchProduct | CreateProduct) => ({
 });
 
 const validation = useValidation();
-// This is fine here, because the component will be recreated.
-// eslint-disable-next-line vue/no-setup-props-destructure
+
+const dialogTitle = computed<string>(() => (props.editId ? t('editProduct') : t('createProduct')));
+const editId = computed(() => props.editId);
+
 const form = useForm<ViewProduct, CreateProduct, PatchProduct, SearchParameters>({
     emit,
     service: productService,
@@ -61,10 +63,8 @@ const form = useForm<ViewProduct, CreateProduct, PatchProduct, SearchParameters>
     validationFunctions: {
         name: [(value: string | undefined | null) => validation.limitedString(value, DEFAULT_INPUT_MIN_LENGTH, DEFAULT_INPUT_MAX_LENGTH, false)],
     },
-    editId: props.editId,
+    editId: editId.value,
 });
-
-const dialogTitle = computed<string>(() => (props.editId ? t('editProduct') : t('createProduct')));
 
 </script>
 
@@ -97,18 +97,18 @@ Dialog(
                 class="margin-top"
                 required
             )
-
             TextAreaLocalized(
                 v-model="form.editModel.value.descriptionLocalized"
                 :label="t('description')"
                 class="margin-top"
             )
+
         div(class="vertical-separator")
+
         div(class="overflow--hidden")
             ProductVariantList(
                 v-if="form.origin.value"
                 :product="form.origin.value"
             )
-
 
 </template>

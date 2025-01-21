@@ -42,4 +42,3 @@ export const getCdnBaseUrl = (): string => {
     }
     return cdnBaseUrl;
 };
-

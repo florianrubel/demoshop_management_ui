@@ -7,7 +7,6 @@ import type { ErrorResponseBody } from '~api/interfaces/api';
 import type AbstractDefaultService from '~api/services/abstractDefaultService';
 import { decapitalizeFirstLetter } from '~/helpers/misc';
 
-
 import { useNotificationStore } from '~/store/notifications';
 
 export default function useForm<ViewType, CreateType, PatchType extends object, SearchParametersType>({
@@ -152,12 +151,12 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     }
 
     async function onInit(): Promise<void> {
-        if (editId){
+        if (editId) {
             await load();
         }
-    };
+    }
 
-    void onInit();
+    onInit();
 
     return {
         emit,

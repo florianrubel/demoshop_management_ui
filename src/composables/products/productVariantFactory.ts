@@ -70,8 +70,6 @@ export type PoolKey =
     'productVariantNumericProperties' |
     'productVariantStringProperties';
 
-
-
 export default function useProductVariantFactory(productVariants: Ref<ViewProductVariant[]>) {
     const { t } = useI18n();
 
@@ -150,6 +148,8 @@ export default function useProductVariantFactory(productVariants: Ref<ViewProduc
                 pageSize: -1,
                 productVariantIds: productVariantIds.value.join(','),
             }, abortControllers.value[poolKey]?.signal);
+            // The ref is expected to change its value.
+            // eslint-disable-next-line no-param-reassign
             pool.value = res.data;
         } catch (error) {
             if (!axios.isCancel(error)) {
@@ -186,13 +186,15 @@ export default function useProductVariantFactory(productVariants: Ref<ViewProduc
         try {
             abortControllers.value[poolKey] = new AbortController();
             const res = await service.getMultipleByIdsByPost(
-                [... new Set(ids)],
+                [...new Set(ids)],
                 undefined,
                 abortControllers.value[poolKey]?.signal,
             );
+            // The ref is expected to change its value.
+            // eslint-disable-next-line no-param-reassign
             pool.value = res.data;
             // @ts-expect-error Ts cannot resolve this at this location.
-            pool.value.sort((a, b) => a.name > b.name ? 1 : -1);
+            pool.value.sort((a, b) => (a.name > b.name ? 1 : -1));
         } catch (error) {
             if (!axios.isCancel(error)) {
                 notificationStore.addNotification({

@@ -51,7 +51,9 @@ const editable = useEditable(searchable.delayedLoad);
 
 const headers = computed<DataTableHeader[]>(() => [
     { label: t('name'), property: 'name', allowSorting: true },
-    { label: t('defaultPrice'), property: 'defaultPriceInCents', allowSorting: true, align: 'right' },
+    {
+        label: t('defaultPrice'), property: 'defaultPriceInCents', allowSorting: true, align: 'right',
+    },
     { label: t('description') },
     { label: t('createdAt'), property: 'createdAt', allowSorting: true },
     { label: t('updatedAt'), property: 'updatedAt', allowSorting: true },
@@ -67,7 +69,7 @@ function handleDataTableAction(actionEvent: DataTableActionEvent) {
     }
 }
 
-void searchable.load();
+searchable.load();
 </script>
 
 <template lang="pug">

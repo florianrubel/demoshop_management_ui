@@ -3,7 +3,6 @@ import { ref } from 'vue';
 export default function useEditable(
     loadFunction: CallableFunction,
 ) {
-
     const showCreate = ref<boolean>(false);
     const showEditFor = ref<string | null | undefined>(null);
 
@@ -11,7 +10,7 @@ export default function useEditable(
         showCreate.value = false;
         showEditFor.value = null;
         if (loadData) {
-            void loadFunction();
+            loadFunction();
         }
     }
 

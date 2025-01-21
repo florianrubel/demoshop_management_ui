@@ -31,7 +31,7 @@ const options = computed<SelectOption<string>[]>(() => records.value.map((record
     label: record[props.labelProperty as keyof UuidViewModel] as string,
 })));
 
-function emitInput(value: string): void {
+function emitInput(value: string | null | undefined): void {
     emits('update:model-value', value);
     emits('update:value', value ? records.value.find(({ id }) => id === value) : null);
 }
@@ -63,12 +63,12 @@ async function loadValue(): Promise<void> {
 }
 
 watch(() => props.modelValue, () => {
-    void loadOptions();
-    void loadValue();
+    loadOptions();
+    loadValue();
 });
 
-void loadOptions();
-void loadValue();
+loadOptions();
+loadValue();
 </script>
 
 <template lang="pug">

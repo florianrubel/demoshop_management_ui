@@ -20,8 +20,7 @@ export default function useSearchable<ViewType, CreateType, PatchType, SearchPar
     ids?: ComputedRef<string[]>;
     additionalSearchParameters?: ComputedRef<Record<string, unknown>>;
     postLoadFunction?: () => Promise<unknown>;
-},
-) {
+}) {
     const { t } = useI18n();
 
     const notificationStore = useNotificationStore();
@@ -58,10 +57,10 @@ export default function useSearchable<ViewType, CreateType, PatchType, SearchPar
                 }, searchAbortController.value.signal);
 
                 records.value = res.data;
-                page.value = Number.parseInt(res.headers['pagination.page']);
-                pages.value = Number.parseInt(res.headers['pagination.totalpages']);
-                pageSize.value = Number.parseInt(res.headers['pagination.pagesize']);
-                total.value = Number.parseInt(res.headers['pagination.totalcount']);
+                page.value = Number.parseInt(res.headers['pagination.page'], 10);
+                pages.value = Number.parseInt(res.headers['pagination.totalpages'], 10);
+                pageSize.value = Number.parseInt(res.headers['pagination.pagesize'], 10);
+                total.value = Number.parseInt(res.headers['pagination.totalcount'], 10);
                 if (postLoadFunction) await postLoadFunction();
             }
         } catch (error) {
@@ -76,9 +75,9 @@ export default function useSearchable<ViewType, CreateType, PatchType, SearchPar
         isLoading.value = false;
     }
 
-    function delayedLoad(){
+    function delayedLoad() {
         searchTimeout.value = setTimeout(() => {
-            void load();
+            load();
         }, 1000);
     }
 
@@ -108,4 +107,3 @@ export default function useSearchable<ViewType, CreateType, PatchType, SearchPar
         delayedLoad,
     };
 }
-

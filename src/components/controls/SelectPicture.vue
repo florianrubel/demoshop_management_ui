@@ -30,6 +30,7 @@ div(
     div(class="select-picture__input")
         button(
             class="select-picture__select"
+            type="button"
             @click="showPictureExplorer = true"
         )
             span(

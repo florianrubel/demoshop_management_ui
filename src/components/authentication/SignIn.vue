@@ -4,7 +4,9 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { AtSymbolIcon, KeyIcon, EyeIcon, EyeSlashIcon } from '~/helpers/icons';
+import {
+    AtSymbolIcon, KeyIcon, EyeIcon, EyeSlashIcon,
+} from '~/helpers/icons';
 import { saveTokens } from '~api/helpers/authentication';
 import { getSuperAdminPass, getSuperAdminUser } from '~/helpers/env';
 

@@ -18,10 +18,10 @@ const emits = defineEmits(['focus', 'blur', 'enter']);
 const cloud = useCKEditorCloud({
     version: '44.1.0',
     premium: false,
-} );
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const editor = computed<any>( () => {
+const editor = computed<any>(() => {
     if (!cloud.data.value) {
         return null;
     }
@@ -32,7 +32,9 @@ const config = computed<EditorConfig | undefined>(() => {
         return undefined;
     }
 
-    const { Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List, Heading, SourceEditing } = cloud.data.value.CKEditor;
+    const {
+        Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List, Heading, SourceEditing,
+    } = cloud.data.value.CKEditor;
 
     return {
         plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List, Heading, SourceEditing],

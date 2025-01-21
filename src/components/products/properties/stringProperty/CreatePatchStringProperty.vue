@@ -49,7 +49,7 @@ const getDefaultFormProperties = (): (PatchStringProperty | CreateStringProperty
 
 const validation = useValidation();
 // This is fine here, because the component will be recreated.
-// eslint-disable-next-line vue/no-setup-props-destructure
+
 const form = useForm<ViewStringProperty, CreateStringProperty, PatchStringProperty, SearchParameters>({
     emit,
     service: stringPropertyService,
@@ -83,7 +83,9 @@ function removeAllowed(value: string) {
 Dialog(
     :title="dialogTitle"
     :save-and-cancel="true"
-    :disable-saving="form.isSaving.value || form.isLoading.value"
+    :disable-saving="form.isSaving.value || form.isLoading.value || !form.hasChanges.value"
+    :disable-cancel="form.isSaving.value || form.isLoading.value"
+    :has-changes="form.hasChanges.value"
     :is-loading="form.isSaving.value"
     @save="form.save()"
     @close="emit('cancel')"

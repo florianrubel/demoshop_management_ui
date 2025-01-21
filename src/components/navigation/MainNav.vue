@@ -9,7 +9,6 @@ import { useAuthenticationStore } from '~/store/authentication';
 
 import BrandLogo from '~/components/navigation/BrandLogo.vue';
 
-
 const { t } = useI18n();
 
 const authenticationStore = useAuthenticationStore();

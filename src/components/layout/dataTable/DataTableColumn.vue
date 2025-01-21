@@ -59,7 +59,7 @@ div(
     template(v-else-if="props.format === 'picture'")
 
     template(v-else)
-        span(:class="{'text--ellipsis': props.format === 'ellipsis'}") {{ props.value }}
+        span(:class="{ 'text--ellipsis': props.format === 'ellipsis' }") {{ props.value }}
 
 div(
     v-else
