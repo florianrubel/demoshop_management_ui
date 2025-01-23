@@ -1,6 +1,8 @@
 import type { AxiosError } from 'axios';
 import {
     computed, ref,
+    watch,
+    type ComputedRef,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ErrorResponseBody } from '~api/interfaces/api';
@@ -20,7 +22,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     service: AbstractDefaultService<ViewType, CreateType, PatchType, SearchParametersType>;
     getDefaultFormProperties: CallableFunction;
     validationFunctions?: Record<string, CallableFunction[]>,
-    editId?: string | null;
+    editId?: ComputedRef<string | null | undefined>;
 }) {
     const { t } = useI18n();
 
@@ -89,8 +91,8 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         savingFailed.value = false;
         resErrors.value = [];
         try {
-            if (editId) {
-                const result = (await service.patch({ [editId]: preparedModel ? getChangedPatch(preparedModel as unknown as PatchType) : changedPatch.value })).data;
+            if (editId?.value) {
+                const result = (await service.patch({ [editId.value]: preparedModel ? getChangedPatch(preparedModel as unknown as PatchType) : changedPatch.value })).data;
                 if (emit) emit('patched', result);
                 if (emit) emit('saved', result);
                 notificationStore.addNotification({
@@ -137,11 +139,11 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     }
 
     async function load(): Promise<void> {
-        if (!editId) return;
+        if (!editId?.value) return;
         loadingOriginFailed.value = false;
         isLoading.value = true;
         try {
-            const res = await service.getOneOrDefault(editId);
+            const res = await service.getOneOrDefault(editId.value);
             (origin.value as ViewType) = res.data;
             mapToFormProperties();
         } catch {
@@ -151,10 +153,14 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     }
 
     async function onInit(): Promise<void> {
-        if (editId) {
+        if (editId?.value) {
             await load();
         }
     }
+
+    watch(() => editId?.value, () => {
+        onInit();
+    });
 
     onInit();
 

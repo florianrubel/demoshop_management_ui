@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { getCdnBaseUrl } from '~/helpers/env';
@@ -13,6 +13,7 @@ import { useNotificationStore } from '~/store/notifications';
 import Dialog from '~/components/dialogs/Dialog.vue';
 import LoadingWrapper from '~/components/layout/LoadingWrapper.vue';
 import { CheckIcon } from '~/helpers/icons';
+import { arraysAreEqual } from '~/helpers/misc';
 
 const { t } = useI18n();
 
@@ -34,13 +35,18 @@ const files = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const selectedFiles = ref<string[]>([]);
 
+const canSave = computed<boolean>(() => {
+    if (selectedFiles.value.length === 0 && (props.preSelectedFiles || []).length === 0) return false;
+    return !arraysAreEqual(props.preSelectedFiles || [], selectedFiles.value);
+});
+
 const filesService = new FilesService(
     () => authentictionStore.setUser(),
     () => authentictionStore.deleteUser(),
 );
 
 function created(): void {
-    selectedFiles.value = props.preSelectedFiles || [];
+    selectedFiles.value = [...props.preSelectedFiles || []];
     getFiles();
 }
 
@@ -83,6 +89,8 @@ Dialog(
     :title="t('fileExplorer')"
     :full-size="true"
     :save-and-cancel="props.multiple"
+    :disable-saving="!canSave"
+    :has-changes="canSave"
     @close="emit('cancel')"
     @save="emit('files-selected', selectedFiles)"
 )

@@ -10,7 +10,7 @@ import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/i
 import type { SortingDirection } from '~/interfaces/ui';
 
 import {
-    CheckIcon, InformationCircleIcon, PencilIcon, XMarkIcon,
+    CheckIcon, InformationCircleIcon, PencilIcon, PlusIcon, XMarkIcon,
 } from '~/helpers/icons';
 import { getCdnBaseUrl } from '~/helpers/env';
 
@@ -31,6 +31,7 @@ import DataTable from '~/components/layout/dataTable/DataTable.vue';
 import DataTableRow from '~/components/layout/dataTable/DataTableRow.vue';
 import DataTableColumn from '~/components/layout/dataTable/DataTableColumn.vue';
 import CreatePatchProductVariant from '~/components/products/productVariants/CreatePatchProductVariant.vue';
+import Button from '~/components/controls/Button.vue';
 
 const CDN_BASE_URL = getCdnBaseUrl();
 
@@ -128,6 +129,14 @@ watch(() => [
     productVariantFactory.hydratedProductVariants.value = copy;
 });
 
+async function handleSaved(productVariants: ViewProductVariant[]) {
+    await searchable.load();
+    const [productVariant] = productVariants;
+    if (productVariant) {
+        editable.switchToEdit(productVariant.id);
+    }
+}
+
 watch(() => props.product, () => {
     searchable.load();
 });
@@ -137,14 +146,21 @@ if (props.product) searchable.load();
 
 <template lang="pug">
 div(class="flex flex--column flex--gap flex--fix-full-height")
-    div
-        h2 {{ t('productVariants') }}
-        div(
-            v-if="props.product"
-            class="flex flex--gap-f2 text--neutral"
-        )
-            InformationCircleIcon(class="icon")
-            span {{ t('horizontalScrollHint') }}
+    div(class="flex flex--justify-between")
+        div
+            h2 {{ t('productVariants') }}
+            div(
+                v-if="props.product"
+                class="flex flex--gap-f2 text--neutral"
+            )
+                InformationCircleIcon(class="icon")
+                span {{ t('horizontalScrollHint') }}
+        div
+            Button(@click="editable.showCreate.value = true")
+                template(#iconLeft)
+                    PlusIcon
+                template(#default) {{ t('create') }}
+
     div(
         v-if="props.product"
         class="overflow--hidden flex flex--full-height"
@@ -217,6 +233,7 @@ div(class="flex flex--column flex--gap flex--fix-full-height")
         :hydrated-product-variant="editHydratedProductVariant"
         @cancel="editable.hideCreateEdit(true)"
         @refresh="searchable.load()"
+        @saved="handleSaved"
     )
 
 </template>

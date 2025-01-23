@@ -14,12 +14,17 @@ import {
 
 const notificationStore = useNotificationStore();
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     type?: string;
     duration?: number;
     notification?: Notification;
     onSurface?: boolean;
-}>();
+}>(), {
+    type: 'info',
+    duration: undefined,
+    notification: undefined,
+    onSurface: false,
+});
 
 const classes = computed<string[]>(() => {
     const tmp = [];

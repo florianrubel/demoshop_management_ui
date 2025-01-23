@@ -46,3 +46,19 @@ export function formatDateTime(isoString?: string | null, locale?: string): stri
         second: '2-digit',
     })).format(dateTime);
 }
+
+export function arraysAreEqual<T>(array1: T[], array2: T[]): boolean {
+    // Check if the arrays are the same length
+    if (array1.length !== array2.length) {
+        return false;
+    }
+
+    // Compare each element in the arrays
+    for (let i = 0; i < array1.length; i += 1) {
+        if (array1[i] !== array2[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}

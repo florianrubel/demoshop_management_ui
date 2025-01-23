@@ -14,10 +14,16 @@ export default function useEditable(
         }
     }
 
+    function switchToEdit(id: string): void {
+        showEditFor.value = id;
+        showCreate.value = false;
+    }
+
     return {
         showCreate,
         showEditFor,
 
         hideCreateEdit,
+        switchToEdit,
     };
 }

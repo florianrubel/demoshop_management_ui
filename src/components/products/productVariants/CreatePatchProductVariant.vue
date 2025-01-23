@@ -2,7 +2,6 @@
 import {
     computed,
     ref,
-    watch,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -28,6 +27,7 @@ import ManageProductVariantBooleanProperties from '~/components/products/product
 import ManageProductVariantNumericProperties from '~/components/products/productVariantNumericProperties/ManageProductVariantNumericProperties.vue';
 import ManageProductVariantStringProperties from '~/components/products/productVariantStringProperties/ManageProductVariantStringProperties.vue';
 import LoadingWrapper from '~/components/layout/LoadingWrapper.vue';
+import Notification from '~/components/notifications/Notification.vue';
 
 const { t } = useI18n();
 
@@ -98,20 +98,18 @@ const form = useForm<ViewProductVariant, CreateProductVariant, PatchProductVaria
     emit,
     service: productvariantService,
     getDefaultFormProperties,
-    editId: editId.value,
+    editId,
 });
 
 async function save(): Promise<void> {
     await form.save();
-    manageBooleanProperties.value.save();
-    manageNumericProperties.value.save();
-    manageStringProperties.value.save();
+    if (props.editId) {
+        manageBooleanProperties.value.save();
+        manageNumericProperties.value.save();
+        manageStringProperties.value.save();
+    }
     emit('refresh');
 }
-
-watch(() => props.hydratedProductVariant, () => {
-    console.log(props.hydratedProductVariant);
-});
 </script>
 
 <template lang="pug">
@@ -140,39 +138,41 @@ Dialog(
 
                     hr
 
-                    ManageProductVariantBooleanProperties(
-                        v-if="props.editId"
-                        ref="manageBooleanProperties"
-                        v-model:to-delete="toDelete.booleanProperties.value"
-                        v-model:to-create="toCreate.booleanProperties.value"
-                        v-model:to-patch="toPatch.booleanProperties.value"
-                        :product-variant-id="props.editId"
-                        :hydrated-product-variant="props.hydratedProductVariant"
-                    )
+                    template(v-if="props.editId")
 
-                    hr
+                        ManageProductVariantBooleanProperties(
+                            ref="manageBooleanProperties"
+                            v-model:to-delete="toDelete.booleanProperties.value"
+                            v-model:to-create="toCreate.booleanProperties.value"
+                            v-model:to-patch="toPatch.booleanProperties.value"
+                            :product-variant-id="props.editId"
+                            :hydrated-product-variant="props.hydratedProductVariant"
+                        )
 
-                    ManageProductVariantNumericProperties(
-                        v-if="props.editId"
-                        ref="manageNumericProperties"
-                        v-model:to-delete="toDelete.numericProperties.value"
-                        v-model:to-create="toCreate.numericProperties.value"
-                        v-model:to-patch="toPatch.numericProperties.value"
-                        :product-variant-id="props.editId"
-                        :hydrated-product-variant="props.hydratedProductVariant"
-                    )
+                        hr
 
-                    hr
+                        ManageProductVariantNumericProperties(
+                            ref="manageNumericProperties"
+                            v-model:to-delete="toDelete.numericProperties.value"
+                            v-model:to-create="toCreate.numericProperties.value"
+                            v-model:to-patch="toPatch.numericProperties.value"
+                            :product-variant-id="props.editId"
+                            :hydrated-product-variant="props.hydratedProductVariant"
+                        )
 
-                    ManageProductVariantStringProperties(
-                        v-if="props.editId"
-                        ref="manageStringProperties"
-                        v-model:to-delete="toDelete.stringProperties.value"
-                        v-model:to-create="toCreate.stringProperties.value"
-                        v-model:to-patch="toPatch.stringProperties.value"
-                        :product-variant-id="props.editId"
-                        :hydrated-product-variant="props.hydratedProductVariant"
-                    )
+                        hr
+
+                        ManageProductVariantStringProperties(
+                            ref="manageStringProperties"
+                            v-model:to-delete="toDelete.stringProperties.value"
+                            v-model:to-create="toCreate.stringProperties.value"
+                            v-model:to-patch="toPatch.stringProperties.value"
+                            :product-variant-id="props.editId"
+                            :hydrated-product-variant="props.hydratedProductVariant"
+                        )
+
+                    template(v-else)
+                        Notification(:on-surface="true") {{ t('saveFirstToEditPropertyRelations') }}
 
                 div(class="vertical-separator")
                 div(class="overflow--scroll-y")

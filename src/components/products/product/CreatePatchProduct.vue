@@ -7,8 +7,6 @@ import { useI18n } from 'vue-i18n';
 import type { CreateProduct, PatchProduct, ViewProduct } from '~api/interfaces/pim/product';
 import type { SearchParameters } from '~api/interfaces/api';
 
-import { DEFAULT_INPUT_MAX_LENGTH, DEFAULT_INPUT_MIN_LENGTH } from '~/constants/app';
-
 import { getDefaultDescriptionLocalized } from '~/helpers/misc';
 
 import ProductService from '~api/services/pim/productService';
@@ -23,6 +21,7 @@ import Dialog from '~/components/dialogs/Dialog.vue';
 import TextAreaLocalized from '~/components/controls/TextAreaLocalized.vue';
 import CurrencyTextField from '~/components/controls/CurrencyTextField.vue';
 import ProductVariantList from '~/components/products/productVariants/ProductVariantList.vue';
+import Notification from '~/components/notifications/Notification.vue';
 
 const { t } = useI18n();
 
@@ -61,9 +60,10 @@ const form = useForm<ViewProduct, CreateProduct, PatchProduct, SearchParameters>
     service: productService,
     getDefaultFormProperties,
     validationFunctions: {
-        name: [(value: string | undefined | null) => validation.limitedString(value, DEFAULT_INPUT_MIN_LENGTH, DEFAULT_INPUT_MAX_LENGTH, false)],
+        name: [(value: string | undefined | null) => validation.limitedString(value)],
+        defaultPriceInCents: [(value: number | undefined | null) => validation.limitedInt32(value, 0)],
     },
-    editId: editId.value,
+    editId,
 });
 
 </script>
@@ -106,8 +106,12 @@ Dialog(
         div(class="vertical-separator")
 
         div(class="overflow--hidden")
+            Notification(
+                v-if="!form.origin.value"
+                :on-surface="true"
+            ) {{ t('saveCreatedProductExplanationProductVariants') }}
             ProductVariantList(
-                v-if="form.origin.value"
+                v-else
                 :product="form.origin.value"
             )
 

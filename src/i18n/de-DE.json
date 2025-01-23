@@ -59,5 +59,9 @@
     "editNumericProperty": "Numerische Eigenschaft bearbeiten",
     "createNumericProperty": "Numerische Eigenschaft erstellen",
     "noChanges": "Keine Änderungen",
-    "close": "Schließen"
+    "close": "Schließen",
+    "int32TooSmall": "Der Wert muss minimal {min} betragen.",
+    "int32TooLarge": "Der Wert darf maximal {max} betragen.",
+    "saveCreatedProductExplanationProductVariants": "Bitte speichern Sie zuerst das neue Produkt ab, damit Sie Product-Varianten anlegen können.",
+    "saveFirstToEditPropertyRelations": "Bitte speichern Sie zuerst die Produkt-Variante ab, damit Sie die Eigenschaften bearbeiten können."
 }

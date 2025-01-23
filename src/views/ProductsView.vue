@@ -69,6 +69,13 @@ function handleDataTableAction(actionEvent: DataTableActionEvent) {
     }
 }
 
+function handleSaved(products: ViewProduct[]) {
+    const [product] = products;
+    if (product) {
+        editable.switchToEdit(product.id);
+    }
+}
+
 searchable.load();
 </script>
 
@@ -137,8 +144,8 @@ Page
         CreatePatchProduct(
             v-if="editable.showCreate.value || editable.showEditFor.value"
             :edit-id="editable.showEditFor.value"
-            @cancel="editable.hideCreateEdit()"
-            @saved="editable.hideCreateEdit(true)"
+            @cancel="editable.hideCreateEdit(true)"
+            @saved="handleSaved"
         )
 
 </template>
