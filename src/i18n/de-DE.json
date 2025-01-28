@@ -63,5 +63,7 @@
     "int32TooSmall": "Der Wert muss minimal {min} betragen.",
     "int32TooLarge": "Der Wert darf maximal {max} betragen.",
     "saveCreatedProductExplanationProductVariants": "Bitte speichern Sie zuerst das neue Produkt ab, damit Sie Product-Varianten anlegen können.",
-    "saveFirstToEditPropertyRelations": "Bitte speichern Sie zuerst die Produkt-Variante ab, damit Sie die Eigenschaften bearbeiten können."
+    "saveFirstToEditPropertyRelations": "Bitte speichern Sie zuerst die Produkt-Variante ab, damit Sie die Eigenschaften bearbeiten können.",
+    "responseConflicts": "Es sind einige Konflikte aufgetreten. Bitte überprüfen Sie Ihre Eingaben.",
+    "propertyValueConflict": "Für das Feld besteht bereits ein Datensatz mit dem Wert: {value}."
 }

@@ -42,6 +42,8 @@ interface Props {
 }
 const props = defineProps<Props>();
 
+const editId = computed(() => props.editId);
+
 const getDefaultFormProperties = (): (PatchStringProperty | CreateStringProperty) => ({
     name: '',
     allowedValues: [],
@@ -57,7 +59,7 @@ const form = useForm<ViewStringProperty, CreateStringProperty, PatchStringProper
     validationFunctions: {
         name: [(value: string | undefined | null) => validation.limitedString(value, DEFAULT_INPUT_MIN_LENGTH, DEFAULT_INPUT_MAX_LENGTH, false)],
     },
-    editId: props.editId,
+    editId,
 });
 
 const newAllowedValue = ref<string>('');
@@ -94,7 +96,7 @@ Dialog(
     TextField(
         v-model="form.editModel.value.name"
         :label="t('name')"
-        :errors="form.errors.value.name"
+        :errors="form.errorsAndConflicts.value.name"
         class="margin-top"
         required
     )

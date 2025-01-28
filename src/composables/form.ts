@@ -5,7 +5,7 @@ import {
     type ComputedRef,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { ErrorResponseBody } from '~api/interfaces/api';
+import type { CustomErrorResponseBody, ErrorResponseBody } from '~api/interfaces/api';
 import type AbstractDefaultService from '~api/services/abstractDefaultService';
 import { decapitalizeFirstLetter } from '~/helpers/misc';
 
@@ -36,6 +36,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
     const errors = ref<Record<string, string[]>>({});
     const loadingOriginFailed = ref<boolean>(false);
     const resErrors = ref<Record<string, string[]>[]>([]);
+    const conflicts = ref<Record<string, string[]>>({});
 
     function getChangedPatch(model: PatchType) {
         if (!origin.value) return model;
@@ -50,9 +51,22 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         return changed;
     }
 
+    const errorsAndConflicts = computed<Record<string, string[]>>(() => {
+        const tmp: Record<string, string[]> = JSON.parse(JSON.stringify(errors.value));
+
+        Object.keys(conflicts.value).forEach((key) => {
+            if (!conflicts.value[key]) return;
+            if (!tmp[key]) tmp[key] = [];
+            conflicts.value[key].forEach((conflictValue) => {
+                tmp[key].push(t('propertyValueConflict', { value: conflictValue }));
+            });
+        });
+
+        return tmp;
+    });
     const changedPatch = computed<PatchType>(() => getChangedPatch(editModel.value as PatchType));
     const toCreate = computed<CreateType>(() => changedPatch.value as unknown as CreateType);
-    const hasErrors = computed<boolean>(() => Object.keys(errors.value).length > 0);
+    const hasErrors = computed<boolean>(() => Object.keys(errorsAndConflicts.value).length > 0);
     const hasChanges = computed<boolean>(() => Object.keys(changedPatch.value).length > 0);
     const canSave = computed<boolean>(() => hasChanges.value);
 
@@ -90,6 +104,7 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         isSaving.value = true;
         savingFailed.value = false;
         resErrors.value = [];
+        conflicts.value = {};
         try {
             if (editId?.value) {
                 const result = (await service.patch({ [editId.value]: preparedModel ? getChangedPatch(preparedModel as unknown as PatchType) : changedPatch.value })).data;
@@ -125,6 +140,15 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
                         const indexNumeric = Number.parseInt(index, 10);
                         if (!resErrors.value[indexNumeric]) resErrors.value[indexNumeric] = {};
                         resErrors.value[indexNumeric][decapitalizeFirstLetter(property)] = responseErrors[key];
+                    });
+                }
+            } else if (axiosError.response?.status === 409 && (axiosError.response?.data as CustomErrorResponseBody).errors) {
+                const [customError] = (axiosError.response?.data as CustomErrorResponseBody).errors;
+                if (customError.conflicts) {
+                    conflicts.value = customError.conflicts;
+                    notificationStore.addNotification({
+                        text: t('responseConflicts'),
+                        type: 'error',
                     });
                 }
             } else {
@@ -172,10 +196,12 @@ export default function useForm<ViewType, CreateType, PatchType extends object, 
         editModel,
         origin,
         errors,
+        conflicts,
         resErrors,
         loadingOriginFailed,
         changedPatch,
         canSave,
+        errorsAndConflicts,
         hasErrors,
         hasChanges,
         validateForm,

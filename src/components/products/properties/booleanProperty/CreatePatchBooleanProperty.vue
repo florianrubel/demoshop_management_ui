@@ -40,12 +40,13 @@ interface Props {
 }
 const props = defineProps<Props>();
 
+const editId = computed(() => props.editId);
+
 const getDefaultFormProperties = (): (PatchBooleanProperty | CreateBooleanProperty) => ({
     name: '',
 });
 
 const validation = useValidation();
-// This is fine here, because the component will be recreated.
 
 const form = useForm<ViewBooleanProperty, CreateBooleanProperty, PatchBooleanProperty, SearchParameters>({
     emit,
@@ -54,7 +55,7 @@ const form = useForm<ViewBooleanProperty, CreateBooleanProperty, PatchBooleanPro
     validationFunctions: {
         name: [(value: string | undefined | null) => validation.limitedString(value, DEFAULT_INPUT_MIN_LENGTH, DEFAULT_INPUT_MAX_LENGTH, false)],
     },
-    editId: props.editId,
+    editId,
 });
 
 const dialogTitle = computed<string>(() => (props.editId ? t('editStringProperty') : t('createStringProperty')));
@@ -74,7 +75,7 @@ Dialog(
     TextField(
         v-model="form.editModel.value.name"
         :label="t('name')"
-        :errors="form.errors.value.name"
+        :errors="form.errorsAndConflicts.value.name"
         class="margin-top"
         required
     )
