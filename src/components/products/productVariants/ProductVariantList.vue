@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type {
-    CreateProductVariant, PatchProductVariant, ProductVariantPaginationParameters, ViewProductVariant,
+    ProductVariantPaginationParameters, ViewProductVariant,
 } from '~api/interfaces/pim/productVariant';
 import type { ViewProduct } from '~/sharedLib/api/src/interfaces/pim/product';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
@@ -54,8 +54,6 @@ const additionalSearchParameters = computed<Record<string, unknown>>(() => ({
 
 const searchable = useSearchable<
     ViewProductVariant,
-    CreateProductVariant,
-    PatchProductVariant,
     ProductVariantPaginationParameters
 >({
     service: productvariantService,

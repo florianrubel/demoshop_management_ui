@@ -43,6 +43,30 @@
         display: flex;
     }
 
+    &__progress {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--color-primary);
+        border-radius: inherit;
+        overflow: hidden;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+    }
+    &__progress-bar {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        background: var(--color-primary-dark);
+    }
+    &__progress-label {
+        position: relative;
+    }
+
     img, svg {
         // display: block;
         height: calc(var(--height-input) * 0.5) !important;
@@ -110,8 +134,8 @@
             color: var(--color-disabled);
         }
     }
-    &--loading {
-        .button__content {
+    &--loading, &--progress {
+        .button__content, .button__icon {
             opacity: 0.5;
         }
     }
@@ -138,7 +162,7 @@
     &:disabled {
         cursor: not-allowed;
 
-        .button__content {
+        .button__content, .button__icon {
             opacity: 0.5;
         }
     }

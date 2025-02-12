@@ -6,7 +6,9 @@ import { useI18n } from 'vue-i18n';
 
 import type { NavItemDefinition } from '~/interfaces/navigation';
 
-import { AdjustmentsHorizontalIcon, CubeIcon, HomeIcon } from '~/helpers/icons';
+import {
+    AdjustmentsHorizontalIcon, CubeIcon, HomeIcon, CircleStackIcon,
+} from '~/helpers/icons';
 
 import { getLanguageFromLocale } from '~/i18n';
 
@@ -35,6 +37,11 @@ const navItems = computed<NavItemDefinition[]>(() => ([
         label: t('products'),
         to: { name: 'products' },
         icon: CubeIcon,
+    },
+    {
+        label: t('productsCache'),
+        to: { name: 'products-cache' },
+        icon: CircleStackIcon,
     },
 ]));
 

@@ -18,6 +18,11 @@ const router = createRouter({
             name: 'products',
             component: () => import('~/views/ProductsView.vue'),
         },
+        {
+            path: '/products-cache',
+            name: 'products-cache',
+            component: () => import('~/views/ProductsCacheView.vue'),
+        },
     ],
 });
 

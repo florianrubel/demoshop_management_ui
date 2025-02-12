@@ -62,8 +62,6 @@ export default function useManageProductVariantRelations<
 
     const searchableRelations = useSearchable<
         RelationViewType,
-        RelationCreateType,
-        RelationPatchType,
         RelationSearchParametersType
     >({
         service: relationService,
@@ -73,8 +71,6 @@ export default function useManageProductVariantRelations<
 
     const searchableProperties = useSearchable<
         PropertyViewType,
-        PropertyCreateType,
-        PropertyPatchType,
         PropertySearchParametersType
     >({
         service: propertyService,

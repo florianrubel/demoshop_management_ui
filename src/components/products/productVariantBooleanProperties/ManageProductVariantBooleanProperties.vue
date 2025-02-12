@@ -66,8 +66,6 @@ const {
     headers,
     existingAndNew,
     dataTableActions,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    changedRelations,
 
     handleDataTableAction,
     addNewRelation,

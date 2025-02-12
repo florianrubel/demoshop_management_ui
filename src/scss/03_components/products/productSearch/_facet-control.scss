@@ -1,0 +1,10 @@
+.facet-control {
+    display: grid;
+    grid-template-columns: 200px auto;
+    overflow: hidden;
+    width: 100%;
+
+    &__content {
+        overflow: hidden;
+    }
+}

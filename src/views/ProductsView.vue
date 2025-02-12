@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateProduct, PatchProduct, ViewProduct } from '~api/interfaces/pim/product';
+import type { ViewProduct } from '~api/interfaces/pim/product';
 import type { SearchParameters } from '~api/interfaces/api';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
 
@@ -39,8 +39,6 @@ const productService = new ProductService(
 
 const searchable = useSearchable<
     ViewProduct,
-    CreateProduct,
-    PatchProduct,
     SearchParameters
 >({
     service: productService,

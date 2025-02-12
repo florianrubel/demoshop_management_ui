@@ -10,6 +10,7 @@ export {
     ChevronDownIcon,
     ChevronUpIcon,
     ChevronUpDownIcon,
+    CircleStackIcon,
     CubeIcon,
     ExclamationTriangleIcon,
     EyeIcon,

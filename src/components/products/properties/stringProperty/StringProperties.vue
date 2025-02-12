@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateStringProperty, PatchStringProperty, ViewStringProperty } from '~api/interfaces/pim/properties/stringProperty';
+import type { ViewStringProperty } from '~api/interfaces/pim/properties/stringProperty';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
 import type { SearchParameters } from '~api/interfaces/api';
 
@@ -32,8 +32,6 @@ const stringPropertyService = new StringPropertyService(
 );
 const searchable = useSearchable<
     ViewStringProperty,
-    CreateStringProperty,
-    PatchStringProperty,
     SearchParameters
 >({ service: stringPropertyService });
 

@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { CreateNumericProperty, PatchNumericProperty, ViewNumericProperty } from '~api/interfaces/pim/properties/numericProperty';
+import type { ViewNumericProperty } from '~api/interfaces/pim/properties/numericProperty';
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
 import type { SearchParameters } from '~api/interfaces/api';
 
@@ -33,8 +33,6 @@ const numericPropertyService = new NumericPropertyService(
 
 const searchable = useSearchable<
     ViewNumericProperty,
-    CreateNumericProperty,
-    PatchNumericProperty,
     SearchParameters
 >({ service: numericPropertyService });
 

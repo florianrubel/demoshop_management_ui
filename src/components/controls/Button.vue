@@ -21,6 +21,7 @@ const props = defineProps<{
     noWrap?: boolean;
     square?: boolean;
     onBackground?: boolean;
+    progress?: number;
 }>();
 
 const classes = computed<string[]>(() => {
@@ -34,6 +35,7 @@ const classes = computed<string[]>(() => {
     if (props.type === 'error') tmp.push('button--error');
     if (props.type === 'info') tmp.push('button--info');
     if (props.loading) tmp.push('button--loading');
+    if (props.progress !== undefined) tmp.push('button--progress');
     if (props.disabled) tmp.push('button--disabled');
     if (props.block) tmp.push('button--block');
     if (props.active) tmp.push('button--active');
@@ -47,13 +49,16 @@ const classes = computed<string[]>(() => {
 </script>
 <template lang="pug">
 a(
-    v-if="(!props.loading && !props.disabled) && props.href"
+    v-if="(!props.loading && !props.disabled && props.progress === undefined) && props.href"
     :class="classes"
     :href="props.href"
     target="_blank"
     rel="noopener noreferrer"
 )
-    ButtonContent(:loading="props.loading")
+    ButtonContent(
+        :loading="props.loading"
+        :progress="props.progress"
+    )
         template(
             v-if="slots.iconLeft"
             #iconLeft
@@ -68,11 +73,14 @@ a(
             slot(name="iconRight")
 
 router-link(
-    v-else-if="(!props.loading && !props.disabled) && props.to"
+    v-else-if="(!props.loading && !props.disabled && props.progress === undefined) && props.to"
     :class="classes"
     :to="props.to"
 )
-    ButtonContent(:loading="props.loading")
+    ButtonContent(
+        :loading="props.loading"
+        :progress="props.progress"
+    )
         template(
             v-if="slots.iconLeft"
             #iconLeft
@@ -89,10 +97,13 @@ router-link(
 button(
     v-else
     :class="classes"
-    :disabled="props.disabled || props.loading"
+    :disabled="props.disabled || props.loading || props.progress !== undefined"
     type="button"
 )
-    ButtonContent(:loading="props.loading")
+    ButtonContent(
+        :loading="props.loading"
+        :progress="props.progress"
+    )
         template(
             v-if="slots.iconLeft"
             #iconLeft

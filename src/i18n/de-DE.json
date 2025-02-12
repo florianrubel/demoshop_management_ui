@@ -65,5 +65,13 @@
     "saveCreatedProductExplanationProductVariants": "Bitte speichern Sie zuerst das neue Produkt ab, damit Sie Product-Varianten anlegen können.",
     "saveFirstToEditPropertyRelations": "Bitte speichern Sie zuerst die Produkt-Variante ab, damit Sie die Eigenschaften bearbeiten können.",
     "responseConflicts": "Es sind einige Konflikte aufgetreten. Bitte überprüfen Sie Ihre Eingaben.",
-    "propertyValueConflict": "Für das Feld besteht bereits ein Datensatz mit dem Wert: {value}."
+    "propertyValueConflict": "Für das Feld besteht bereits ein Datensatz mit dem Wert: {value}.",
+    "from": "Von",
+    "to": "Bis",
+    "noProductsCached": "Bisher wurden keine Producte für die Suche gecached. Bitte starten Sie den Cache-Vorgang um die Produktsuche zu ermöglichen.",
+    "updateCache": "Cache aktualisieren",
+    "productsCache": "Produkt-Cache",
+    "yes": "ja",
+    "no": "nein",
+    "product": "Produkt"
 }

@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { DataTableAction, DataTableActionEvent, DataTableHeader } from '~/interfaces/dataTable';
-import type { CreateBooleanProperty, PatchBooleanProperty, ViewBooleanProperty } from '~api/interfaces/pim/properties/booleanProperty';
+import type { ViewBooleanProperty } from '~api/interfaces/pim/properties/booleanProperty';
 import type { SearchParameters } from '~api/interfaces/api';
 
 import BooleanPropertyService from '~api/services/pim/properties/booleanPropertyService';
@@ -33,8 +33,6 @@ const booleanPropertyService = new BooleanPropertyService(
 );
 const searchable = useSearchable<
     ViewBooleanProperty,
-    CreateBooleanProperty,
-    PatchBooleanProperty,
     SearchParameters
 >({ service: booleanPropertyService });
 

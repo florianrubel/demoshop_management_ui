@@ -5,6 +5,8 @@
     --color-on-background-dark: hsl(0, 0%, 75%);
     
     --color-neutral: hsl(219, 11%, 45%);
+    --color-neutral-transparent: hsla(219, 11%, 45%, 0.3);
+    --color-neutral-transparent-half: hsla(219, 11%, 45%, 0.6);
     --color-neutral-light: hsl(219, 11%, 90%);
     --color-disabled: hsl(219, 11%, 65%);
 
@@ -12,6 +14,7 @@
 
     --color-primary: hsl(212, 74%, 55%);
     --color-primary-transparent: hsla(212, 74%, 55%, 0.3);
+    --color-primary-transparent-half: hsla(212, 74%, 55%, 0.6);
     --color-primary-light: hsl(212, 74%, 85%);
     --color-primary-dark: hsl(212, 74%, 25%);
 

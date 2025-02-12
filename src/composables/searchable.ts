@@ -4,18 +4,20 @@ import { useI18n } from 'vue-i18n';
 
 import type { SortingDirection } from '~/interfaces/ui';
 
-import type AbstractDefaultService from '~api/services/abstractDefaultService';
+import { getPaginationHeaders } from '~/sharedLib/api/src/helpers/api';
+
+import type AbstractReadOnlyService from '~/sharedLib/api/src/services/abstractReadOnlyService';
 
 import { useNotificationStore } from '~/store/notifications';
 
-export default function useSearchable<ViewType, CreateType, PatchType, SearchParametersType>({
+export default function useSearchable<ViewType, SearchParametersType>({
     service,
     initialPageSize,
     ids,
     additionalSearchParameters,
     postLoadFunction,
 }: {
-    service: AbstractDefaultService<ViewType, CreateType, PatchType, SearchParametersType>;
+    service: AbstractReadOnlyService<ViewType, SearchParametersType>;
     initialPageSize?: number;
     ids?: ComputedRef<string[]>;
     additionalSearchParameters?: ComputedRef<Record<string, unknown>>;
@@ -57,10 +59,11 @@ export default function useSearchable<ViewType, CreateType, PatchType, SearchPar
                 }, searchAbortController.value.signal);
 
                 records.value = res.data;
-                page.value = Number.parseInt(res.headers['pagination.page'], 10);
-                pages.value = Number.parseInt(res.headers['pagination.totalpages'], 10);
-                pageSize.value = Number.parseInt(res.headers['pagination.pagesize'], 10);
-                total.value = Number.parseInt(res.headers['pagination.totalcount'], 10);
+                const headers = getPaginationHeaders(res);
+                page.value = headers.page;
+                pages.value = headers.pages;
+                pageSize.value = headers.pageSize;
+                total.value = headers.total;
                 if (postLoadFunction) await postLoadFunction();
             }
         } catch (error) {
